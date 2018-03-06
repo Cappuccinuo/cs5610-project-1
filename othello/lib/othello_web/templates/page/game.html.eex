@@ -1,0 +1,8 @@
+<h1>Othello: <%= @game %></h1>
+<script>
+  window.gameName = "<%= @game %>";
+</script>
+
+<div id="game">
+  Loading...
+</div>
