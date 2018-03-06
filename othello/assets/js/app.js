@@ -11,7 +11,8 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import "phoenix_html";
+import socket from "./socket.js";
 
 // Import local files
 //
@@ -19,3 +20,13 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import run_index from "./index.jsx";
+
+function init() {
+  let index = document.getElementById('index');
+  if (index) {
+    run_index(index);
+  }
+}
+
+$(init);
