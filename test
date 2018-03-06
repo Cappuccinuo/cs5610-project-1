@@ -1,4 +1,7 @@
 Thi is a test for testing how git works in this project
 
 
-public static void main(String[] args)
+
+public static void main(String[] args) {
+    System.out.println("Hello world");
+}
