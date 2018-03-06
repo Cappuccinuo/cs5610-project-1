@@ -20,6 +20,14 @@ git checkout -b new-branch
 # Do your work...
 ```
 
+### When work finished:
+```bash
+git status
+# check modified files
+git add modified-files
+git commit -m "commit notes"
+```
+
 ### Before your code review:
 ```bash
 $ git checkout 
