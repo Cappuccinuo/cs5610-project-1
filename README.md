@@ -16,6 +16,7 @@ We keep a totally linear commit history - no merges, no diamond shapes in our co
 
 ### Start your work:
 ```bash
+git pull
 git checkout -b new-branch
 # Do your work...
 ```
