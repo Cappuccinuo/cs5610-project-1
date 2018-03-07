@@ -13,7 +13,7 @@ defmodule OthelloWeb.PageController do
     if curr_game do
       # game exists
       players = curr_game.players
-      if Kernel.length(players) == 2 || user_name do
+      if Kernel.length(players) == 2 || user_name && String.length(user_name) > 0 do
         # if user is player or game has started, forward to game
         render conn, "game.html", game: params["game"]
       else
@@ -21,7 +21,7 @@ defmodule OthelloWeb.PageController do
       end
     else
       # game doesn't exist
-      if user_name do
+      if user_name && String.length(user_name) > 0 do
         render conn, "game.html", game: params["game"]
       else
         # if not logged in, force log in
