@@ -3,6 +3,7 @@ defmodule OthelloWeb.UserSocket do
 
   ## Channels
   # channel "room:*", OthelloWeb.RoomChannel
+  channel "gamechannel:*", OthelloWeb.GamechannelChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
@@ -19,7 +20,8 @@ defmodule OthelloWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
+  def connect(%{"token" => token}, socket) do
+    socket = assign(socket, :current_user, token)
     {:ok, socket}
   end
 

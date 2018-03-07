@@ -15,17 +15,29 @@ defmodule Othello.Game do
     curr_game = Map.get(games, curr_name)
     if curr_game do
       if Kernel.length(curr_game.players) <= 1 do
-        # second player
-        curr_game = %{curr_game | players: curr_game.players ++ [user_name]}
-        new_games = %{games | curr_name => curr_game}
-        :ok = Agent.update(:games, fn last -> new_games end)
-        curr_game
+        # only one player in room
+        if Enum.member? curr_game.players, user_name do
+          # already first player
+          curr_game
+        else
+          # second player
+          curr_game = %{curr_game | players: curr_game.players ++ [user_name]}
+          new_games = %{games | curr_name => curr_game}
+          :ok = Agent.update(:games, fn last -> new_games end)
+          curr_game
+        end
       else
-        # speculator
-        curr_game = %{curr_game | speculators: curr_game.speculators ++ [user_name]}
-        new_games = %{games | curr_name => curr_game}
-        :ok = Agent.update(:games, fn last -> new_games end)
-        curr_game
+        # two players in room
+        if Enum.member? curr_game.players, user_name do
+          # already a player
+          curr_game
+        else
+          # speculator
+          curr_game = %{curr_game | speculators: curr_game.speculators ++ [user_name]}
+          new_games = %{games | curr_name => curr_game}
+          :ok = Agent.update(:games, fn last -> new_games end)
+          curr_game
+        end
       end
     else
       new_games = Map.put(games, curr_name, new_game(user_name))

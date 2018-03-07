@@ -1,6 +1,7 @@
 <h1>Othello: <%= @game %></h1>
 <script>
   window.gameName = "<%= @game %>";
+  window.userToken = "<%= @current_user %>";
 </script>
 
 <div id="game">

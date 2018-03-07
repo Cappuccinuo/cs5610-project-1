@@ -13,7 +13,7 @@ defmodule OthelloWeb.PageController do
     if curr_game do
       # game exists
       players = curr_game.players
-      if Enum.member?(players, user_name) || Kernel.length(players) == 2 do
+      if Kernel.length(players) == 2 || user_name do
         # if user is player or game has started, forward to game
         render conn, "game.html", game: params["game"]
       else

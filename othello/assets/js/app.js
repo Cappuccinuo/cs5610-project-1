@@ -21,11 +21,17 @@ import socket from "./socket.js";
 
 // import socket from "./socket"
 import run_index from "./index.jsx";
+import run_othello from "./othello.jsx";
 
 function init() {
   let index = document.getElementById('index');
+  let game = document.getElementById('game');
   if (index) {
     run_index(index);
+  }
+  if(game) {
+    let channel = socket.channel("gamechannel:"+window.gameName, {});
+    run_othello(game, channel);
   }
 }
 
