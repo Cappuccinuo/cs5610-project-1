@@ -7,6 +7,7 @@ defmodule OthelloWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :get_current_user
   end
 
   pipeline :api do
@@ -19,6 +20,14 @@ defmodule OthelloWeb.Router do
     get "/", PageController, :index
     get "/login", PageController, :login
     get "/game/:game", PageController, :game
+
+    post "/session", SessionController, :create
+    delete "/session", SessionController, :delete
+  end
+
+  def get_current_user(conn, _params) do
+    user_name = get_session(conn, :user_name)
+    assign(conn, :current_user, user_name)
   end
 
   # Other scopes may use custom stacks.
