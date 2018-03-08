@@ -79,11 +79,15 @@ defmodule Othello.Game do
 
   # ticks to next state
   # returns {boolean, new_state}, where boolean indicates it could be a valid move
-  def simulate_next_state(curr_name, player, index) do
+  def simulate_next_state(curr_name, index) do
     curr_game = get_state curr_name
     colors = curr_game.colors
+    player = curr_game.turn+1
     case update_colors(colors, player, index) do
-      {true, colors} -> {true, %{curr_game | colors: colors} |> update_state(curr_name)}
+      {true, colors} -> {true, curr_game 
+                                |> Map.put(:colors, colors) # update colors
+                                |> Map.put(:turn, 1 - curr_game.turn) # update turn
+                                |> update_state(curr_name)}
       _ -> {false, curr_game}
     end
   end
@@ -106,13 +110,6 @@ defmodule Othello.Game do
     # left
     if valid_next(colors, index-1, player) do
       case check_swaps(colors, index, -1, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
-    # up
-    if valid_next(colors, index-8, player) do
-      case check_swaps(colors, index, -8, player) do
         {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
         _ ->  {false, colors}
       end
