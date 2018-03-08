@@ -87,6 +87,7 @@ defmodule Othello.Game do
       {true, colors} -> {true, curr_game 
                                 |> Map.put(:colors, colors) # update colors
                                 |> Map.put(:turn, 1 - curr_game.turn) # update turn
+                                |> check_win
                                 |> update_state(curr_name)}
       _ -> {false, curr_game}
     end
@@ -174,6 +175,11 @@ defmodule Othello.Game do
           end
       end
     end
+  end
+
+  def check_win(state) do
+    # TODO
+    state
   end
 
   def valid_next(colors, next, target) do
