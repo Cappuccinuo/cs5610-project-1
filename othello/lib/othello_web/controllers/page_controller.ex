@@ -3,7 +3,8 @@ defmodule OthelloWeb.PageController do
   alias Othello.Game
 
   def index(conn, _params) do
-    render conn, "index.html"
+    games = Game.get_all_games
+    render conn, "index.html", games: games
   end
 
   def game(conn, params) do

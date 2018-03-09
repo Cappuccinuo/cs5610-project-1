@@ -55,7 +55,6 @@ class Othello extends React.Component {
           });
   }
 
-
   render() {
     let i = 0;
     const discs = this.state
@@ -111,8 +110,8 @@ class Disc extends React.Component {
     let opacity = this.props.color == 0 ? 0 : 1;
     let index = this.props.index;
     const radius = 20;
-    let y = Math.floor(index/8)*radius*2;
-    let x = index%8*radius*2;
+    let y = Math.floor(index/8)*radius*2+radius;
+    let x = index%8*radius*2+radius;
     let parent = this.props.parent;
     let onClick = null;
     if(this.props.onClick) {
@@ -121,7 +120,7 @@ class Disc extends React.Component {
     
     return (
       <Circle
-        radius={radius}
+        radius={radius-2}
         fill={color}
         opacity={opacity}
         x={x}

@@ -30,8 +30,8 @@ class Index extends React.Component {
     return (
       <Form>
         <FormGroup>
-          <Label>Enter Game Name (existing or new game): </Label>
-          <Input onChange={this.handleChange} placeholder={'Enter a name'}/>
+          <Label>New Game or Join Existing Game): </Label>
+          <Input onChange={this.handleChange} placeholder={'Enter game name'}/>
           <Button color='success' href={link}>Join Game</Button>
         </FormGroup>
       </Form>
