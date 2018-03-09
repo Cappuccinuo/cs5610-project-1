@@ -75,7 +75,7 @@ class Othello extends React.Component {
     return (
       <Stage width={320} height={320} fill={'green'}>
         <Layer>
-          <Board />
+          {discs}
         </Layer>
       </Stage>
     );
