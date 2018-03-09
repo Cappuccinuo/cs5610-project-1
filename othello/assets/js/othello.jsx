@@ -12,6 +12,7 @@ class Othello extends React.Component {
   constructor(props) {
     super(props);
     const channel = props.channel;
+
     this.state = {
       colors:[],
       players:[],
@@ -24,7 +25,7 @@ class Othello extends React.Component {
     channel.join()
       .receive("ok", resp => this.updateView(resp))
       .receive("error", resp => { console.log("Unable to join", resp); });
-    
+
     this.updateView.bind(this);
     this.move.bind(this);
   }
@@ -43,26 +44,49 @@ class Othello extends React.Component {
           .receive("ok", resp => this.updateView(resp));
   }
 
-  
+
   render() {
     let i = 0;
     const discs = this.state
                       .colors
                       .map((color) => (
-                            <Disc 
-                              color={color} 
+                            <Disc
+                              color={color}
                               onClick={this.state.lock ? null : () => this.move(i)}
                               index={i++}
                             />
                           ));
-    
+
     // TODO
     return (
-      <Stage width={800} height={800} fill={'green'}>
+      <Stage x={400} y={100} width={800} height={800}>
         <Layer>
-          {discs}
+          <Board />
         </Layer>
       </Stage>
+    );
+  }
+}
+
+class Board extends React.Component {
+  constructor(props) {
+    super(props);
+    const image = new window.Image();
+    image.onload = () => {
+      this.setState({
+        fillPatternImage: image
+      });
+    }
+    image.src = 'http://www.kissthemachine.com/images/reversi-rules1.png';
+    this.state = {
+      fillPatternImage: null
+    };
+  }
+  render() {
+    return (
+      <Rect x={0} y={0}
+            width={313} height={313}
+            fillPatternImage={this.state.fillPatternImage}></Rect>
     );
   }
 }
@@ -85,7 +109,5 @@ class Disc extends React.Component {
         onClick={this.props.onClick}
       />
     );
-    
   }
-
 }
