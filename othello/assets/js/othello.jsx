@@ -33,15 +33,26 @@ class Othello extends React.Component {
   updateView(resp) {
     console.log("update state", resp);
     this.setState(resp.state);
-    this.setState({lock: false});
+    const players = this.state.players;
+    const turn = this.state.turn
+
+    if(window.userToken == players[turn]) {
+      this.setState({lock: false});
+    }
   }
 
-  move(index) {
-    this.setState({
-      lock: true,
+  move(index, that) {
+    console.log("clicked!");
+    that.setState({
+      lock: false, //FIXME
     });
-    channel.push("move", {index: index})
-          .receive("ok", resp => this.updateView(resp));
+    that.props.channel.push("move", {index: index})
+          .receive("ok", resp => that.updateView(resp))
+          .receive("error", resp => {
+            console.log("update state", resp);
+            alert("cannot move here");
+            that.setState({lock: false});
+          });
   }
 
 
@@ -49,17 +60,20 @@ class Othello extends React.Component {
     let i = 0;
     const discs = this.state
                       .colors
-                      .map((color) => (
-                            <Disc
-                              color={color}
-                              onClick={this.state.lock ? null : () => this.move(i)}
+                      .map((color) => {
+                          return (
+                            <Disc 
+                              color={color} 
+                              onClick={this.state.lock ? null : this.move}
                               index={i++}
+                              parent={this}
                             />
-                          ));
-
+                          );
+                        });
+    
     // TODO
     return (
-      <Stage x={400} y={100} width={800} height={800}>
+      <Stage width={320} height={320} fill={'green'}>
         <Layer>
           <Board />
         </Layer>
@@ -96,9 +110,15 @@ class Disc extends React.Component {
     let color = this.props.color == 1 ? 'black' : 'grey';
     let opacity = this.props.color == 0 ? 0 : 1;
     let index = this.props.index;
-    const radius = 50;
-    let x = Math.floor(index/8)*radius*2;
-    let y = index%8*radius*2;
+    const radius = 20;
+    let y = Math.floor(index/8)*radius*2;
+    let x = index%8*radius*2;
+    let parent = this.props.parent;
+    let onClick = null;
+    if(this.props.onClick) {
+      onClick = () => {this.props.onClick(index, parent);}
+    }
+    
     return (
       <Circle
         radius={radius}
@@ -106,7 +126,7 @@ class Disc extends React.Component {
         opacity={opacity}
         x={x}
         y={y}
-        onClick={this.props.onClick}
+        onClick={onClick}
       />
     );
   }

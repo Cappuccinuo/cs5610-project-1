@@ -80,7 +80,7 @@ defmodule Othello.Game do
   # ticks to next state
   # returns {boolean, new_state}, where boolean indicates it could be a valid move
   def simulate_next_state(curr_name, index) do
-    curr_game = get_state curr_name
+    curr_game = get_state(curr_name)
     colors = curr_game.colors
     player = curr_game.turn+1
     case update_colors(colors, player, index) do
@@ -94,85 +94,65 @@ defmodule Othello.Game do
   end
 
   def update_colors(colors, player, index) do
-    # right
-    if valid_next(colors, index+1, player) do
-      case check_swaps(colors, index, 1, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
+    {:ok, color} = Enum.fetch(colors, index)
+    if color > 0 do
+      # occupied position
+      {false, colors}
+    else
+      {false, colors} 
+        # right
+        |> help_update_colors(index, 1, player)
+        # down
+        |> help_update_colors(index, 8, player)
+        # left
+        |> help_update_colors(index, -1, player)
+        # up
+        |> help_update_colors(index, -8, player)
+        # up-left
+        |> help_update_colors(index, -9, player)
+        # up-right
+        |> help_update_colors(index, -7, player)
+        # down-right
+        |> help_update_colors(index, 9, player)
+        # down-left
+        |> help_update_colors(index, 7, player)
     end
-    # down
-    if valid_next(colors, index+8, player) do
-      case check_swaps(colors, index, 8, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
-    # left
-    if valid_next(colors, index-1, player) do
-      case check_swaps(colors, index, -1, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
-    # up
-    if valid_next(colors, index-8, player) do
-      case check_swaps(colors, index, -8, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
-    # up-left
-    if valid_next(colors, index-9, player) do
-      case check_swaps(colors, index, -9, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
-    # up-right
-    if valid_next(colors, index-7, player) do
-      case check_swaps(colors, index, -7, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
-     # down-right
-    if valid_next(colors, index+9, player) do
-      case check_swaps(colors, index, 9, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
-    # down-left
-    if valid_next(colors, index+7, player) do
-      case check_swaps(colors, index, 7, player) do
-        {true, colors} -> {true, colors |> List.update_at(index, fn _ -> player end)}
-        _ ->  {false, colors}
-      end
-    end
+  end
 
-
+  def help_update_colors(last, index, increment, player) do
+    {last_res, last_colors} = last
+    if valid_next(last_colors, index, index+increment, player) do
+      {curr_res, curr_colors} = check_swaps(last_colors, index, increment, player)
+      if curr_res do
+        {true, curr_colors |> List.update_at(index, fn _ -> player end)}
+      else
+        last
+      end
+    else
+      last
+    end
   end
 
   def check_swaps(colors, start, increment, target) do
     next = start + increment
-    if next >= 64 || next < 0 do
+    if !in_bound(start, next) do
       # out of bound
       {false, colors}
     else
-      {:ok, next_color} = List.get(colors, next)
-      case next_color do
-        0 ->
-          {false, colors}
-        target ->
+      {:ok, next_color} = Enum.fetch(colors, next)
+      if next_color == 0 do
+        {false, colors}
+      else
+        if next_color == target do 
           {true, colors}
-        _ ->
-          case check_swaps(colors, next, increment, target) do
-            {true, colors} ->
-              {true, colors |> List.update_at(next, fn _ -> target end)}
-            _ ->
-              {false, colors}
+        else
+          {res, new_colors} = check_swaps(colors, next, increment, target)
+          if res do
+            {true, List.update_at(new_colors, next, fn _ -> target end)}
+          else
+            {false, colors}
           end
+        end
       end
     end
   end
@@ -182,15 +162,24 @@ defmodule Othello.Game do
     state
   end
 
-  def valid_next(colors, next, target) do
-    case List.get(colors, next) do
-      {:ok, elem} ->
-        case elem do
-          0 -> false
-          _ -> (elem != target)
-        end
-      _ -> false
-    end
+  def in_bound(curr, next) do
+    curr_i = div(curr, 8)
+    curr_j = rem(curr, 8)
+    next_i = div(next, 8)
+    next_j = rem(next, 8)
+    res = (next_j - curr_j) * (next_i - curr_i)
+    next >= 0 && next < 64 && res >= -1 && res <= 1
   end 
 
+  def valid_next(colors, curr, next, target) do
+    if in_bound(curr, next) do
+      case Enum.fetch(colors, next) do
+        {:ok, elem} ->
+          elem != 0 && elem != target
+        _ -> false
+      end
+    else
+      false
+    end
+  end 
 end

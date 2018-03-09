@@ -16,16 +16,17 @@ defmodule OthelloWeb.GamechannelChannel do
 
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
-  def handle_in("ping", payload, socket) do
-    {:reply, {:ok, payload}, socket}
+  def handle_in("move", %{"index" => i}, socket) do
+    curr_name = socket.assigns.curr_name
+    case Game.simulate_next_state(curr_name, i) do
+      {true, game} -> 
+        {:reply, {:ok, %{"state" => game}}, socket}
+      {false, game} ->
+        {:reply, {:error, %{"state" => game}}, socket}
+    end
+    
   end
 
-  # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (gamechannel:lobby).
-  def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
-    {:noreply, socket}
-  end
 
   # Add authorization logic here as required.
   defp authorized?(_payload) do
