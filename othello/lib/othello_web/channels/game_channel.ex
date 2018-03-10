@@ -1,4 +1,4 @@
-defmodule OthelloWeb.GamechannelChannel do
+defmodule OthelloWeb.Gamechannel do
   use OthelloWeb, :channel
   alias Othello.Game
 
@@ -19,12 +19,12 @@ defmodule OthelloWeb.GamechannelChannel do
   def handle_in("move", %{"index" => i}, socket) do
     curr_name = socket.assigns.curr_name
     case Game.simulate_next_state(curr_name, i) do
-      {true, game} -> 
+      {true, game} ->
         {:reply, {:ok, %{"state" => game}}, socket}
       {false, game} ->
         {:reply, {:error, %{"state" => game}}, socket}
     end
-    
+
   end
 
 

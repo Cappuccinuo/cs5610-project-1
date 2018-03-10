@@ -1,35 +1,47 @@
-<h1>Othello</h1>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Game</th>
-      <th>Players</th>
-      <th>Number of Speculators</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for {name, state} <- @games do %>
-    <tr>
-      <td><%= name %></td>
-      <%= if Kernel.length(state.players) == 1 do %>
-        <td><%= List.first(state.players) %> is waiting for a match</td>
-      <% else %>
-        <td><%= List.first(state.players) %> vs <%= List.last(state.players) %></td>
-      <% end %>  
-      <td><%= Kernel.length(state.speculators) %></td>
-      <td>
-      <%= if Kernel.length(state.players) < 2 || Enum.member?(state.players, @current_user) do %>
-        <span><%= link "Join Game", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
-      <% else %>
-        <span><%= link "Speculate", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
-      <% end %>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<div id="index">
-  Loading...
+<div id="home">
+  <div id="index">
+    Loading...
+  </div>
+  <%= if Kernel.length(Map.keys(@games)) != 0 do %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Game</th>
+          <th>Players</th>
+          <th>Number of Speculators</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+    <%= for {name, state} <- @games do %>
+        <tr>
+          <td><%= name %></td>
+          <%= if Kernel.length(state.players) == 1 do %>
+            <td><%= List.first(state.players) %> is waiting for a match</td>
+          <% else %>
+            <td><%= List.first(state.players) %> vs <%= List.last(state.players) %></td>
+          <% end %>
+          <td><%= Kernel.length(state.speculators) %></td>
+          <td>
+          <%= if Kernel.length(state.players) < 2 || Enum.member?(state.players, @current_user) do %>
+            <span><%= link "Join Game", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
+          <% else %>
+            <span><%= link "Speculate", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
+          <% end %>
+          </td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+  <% end %>
 </div>
+
+<script>
+    $(document).keypress(function(event) {
+      if (event.keyCode == 13) {
+        window.location=document.getElementById('enter').href;
+      }
+    });
+</script>

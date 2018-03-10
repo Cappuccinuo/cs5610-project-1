@@ -1,12 +1,12 @@
-defmodule OthelloWeb.GamechannelChannelTest do
+defmodule OthelloWeb.GamechannelTest do
   use OthelloWeb.ChannelCase
 
-  alias OthelloWeb.GamechannelChannel
+  alias OthelloWeb.Gamechannel
 
   setup do
     {:ok, _, socket} =
       socket("user_id", %{some: :assign})
-      |> subscribe_and_join(GamechannelChannel, "gamechannel:lobby")
+      |> subscribe_and_join(Gamechannel, "gamechannel:lobby")
 
     {:ok, socket: socket}
   end

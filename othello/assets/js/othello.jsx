@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Stage, Layer, Rect, Text, Circle } from 'react-konva';
-import Konva from 'konva';
+import React                                                          from 'react';
+import ReactDOM                                                       from 'react-dom';
+import { Stage, Layer, Rect, Text, Circle }                           from 'react-konva';
+import Konva                                                          from 'konva';
 import { Button, Container, Row, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 
 export default function run_othello(root, channel) {
@@ -103,6 +103,7 @@ class Board extends React.Component {
     );
   }
 }
+
 
 class Disc extends React.Component {
   render() {

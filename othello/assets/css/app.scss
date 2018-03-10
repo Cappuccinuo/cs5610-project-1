@@ -1,4 +1,36 @@
 /* This file is for your main application css. */
 @import "bootstrap";
+@import url(https://use.fontawesome.com/releases/v5.0.8/css/all.css);
 
 h1 { text-align: center; }
+#home_index {
+  margin-top: 100px;
+  text-align: center;
+}
+.logo {
+  margin-bottom: 50px;
+}
+.input {
+  width: 40%;
+  margin: auto;
+  margin-top: 40px;
+}
+.join {
+  margin-top: 20px;
+}
+a:link {
+    color: black;
+    text-decoration: none;
+}
+a:visited {
+    color: black;
+    text-decoration: none;
+}
+a:hover {
+    color: gray;
+    text-decoration: none;
+}
+a:active {
+    color: blue;
+    text-decoration: none;
+}
