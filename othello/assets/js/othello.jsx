@@ -61,20 +61,20 @@ class Othello extends React.Component {
                       .colors
                       .map((color) => {
                           return (
-                            <Disc 
-                              color={color} 
+                            <Disc
+                              color={color}
                               onClick={this.state.lock ? null : this.move}
                               index={i++}
                               parent={this}
                             />
                           );
                         });
-    
+
     // TODO
     return (
       <Stage width={320} height={320} fill={'green'}>
         <Layer>
-          {discs}
+          <Board />
         </Layer>
       </Stage>
     );
@@ -90,7 +90,7 @@ class Board extends React.Component {
         fillPatternImage: image
       });
     }
-    image.src = 'http://www.kissthemachine.com/images/reversi-rules1.png';
+    image.src = "/images/board.png";
     this.state = {
       fillPatternImage: null
     };
@@ -117,7 +117,7 @@ class Disc extends React.Component {
     if(this.props.onClick) {
       onClick = () => {this.props.onClick(index, parent);}
     }
-    
+
     return (
       <Circle
         radius={radius-2}
