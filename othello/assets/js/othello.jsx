@@ -3,6 +3,7 @@ import ReactDOM                                                       from 'reac
 import { Stage, Layer, Rect, Text, Circle }                           from 'react-konva';
 import Konva                                                          from 'konva';
 import { Button, Container, Row, Col, Form, FormGroup, Input, Label } from 'reactstrap';
+import Disc                                                           from './components/disc'
 
 export default function run_othello(root, channel) {
   ReactDOM.render(<Othello channel={channel}/>, root);
@@ -55,57 +56,39 @@ class Othello extends React.Component {
           });
   }
 
-  render() {
-    let i = 0;
-    const discs = this.state
-                      .colors
-                      .map((color) => {
-                          return (
-                            <Disc
-                              color={color}
-                              onClick={this.state.lock ? null : this.move}
-                              index={i++}
-                              parent={this}
-                            />
-                          );
-                        });
+  renderDiscs(colors) {
+    return (
+      <div>
+        <Row>
+          {_.map(colors, (color, index) =>
+            <Disc key={index}
+              index={index}
+              color={color}
+              onClick={this.state.lock ? null : this.move}
+              parent={this}
+              />)}
+        </Row>
+      </div>
+    )
+  }
 
+  render() {
     // TODO
     return (
-      <Stage width={320} height={320} fill={'green'}>
-        <Layer>
-          <Board />
-        </Layer>
-      </Stage>
+      <div>
+        <Container>
+          <Row>
+            <Col lg="8">
+              {this.renderDiscs(this.state.colors)}
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
 
-class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    const image = new window.Image();
-    image.onload = () => {
-      this.setState({
-        fillPatternImage: image
-      });
-    }
-    image.src = "/images/board.png";
-    this.state = {
-      fillPatternImage: null
-    };
-  }
-  render() {
-    return (
-      <Rect x={0} y={0}
-            width={313} height={313}
-            fillPatternImage={this.state.fillPatternImage}></Rect>
-    );
-  }
-}
-
-
-class Disc extends React.Component {
+class Discs extends React.Component {
   render() {
     let color = this.props.color == 1 ? 'black' : 'grey';
     let opacity = this.props.color == 0 ? 0 : 1;
@@ -116,7 +99,7 @@ class Disc extends React.Component {
     let parent = this.props.parent;
     let onClick = null;
     if(this.props.onClick) {
-      onClick = () => {this.props.onClick(index, parent);}
+      onClick = () => {this.props.move(index, parent);}
     }
 
     return (
