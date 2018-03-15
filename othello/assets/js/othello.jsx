@@ -3,7 +3,7 @@ import ReactDOM                                                       from 'reac
 import { Stage, Layer, Rect, Text, Circle }                           from 'react-konva';
 import Konva                                                          from 'konva';
 import { Button, Container, Row, Col, Form, FormGroup, Input, Label } from 'reactstrap';
-import Disc                                                           from './components/disc'
+import Disc                                                           from './components/disc.jsx';
 
 export default function run_othello(root, channel) {
   ReactDOM.render(<Othello channel={channel}/>, root);
@@ -21,14 +21,39 @@ class Othello extends React.Component {
       turn: -1,
       winner: null,
       lock: true,
+      images: {},
     }
 
+    this.loadImages.bind(this);
+
+    this.loadImages();
+        
     channel.join()
       .receive("ok", resp => this.updateView(resp))
       .receive("error", resp => { console.log("Unable to join", resp); });
 
+    
+
     this.updateView.bind(this);
     this.move.bind(this);
+  }
+
+  loadImages() {
+    let black = '/images/black.png';
+    let white = '/images/white.png';
+    var images = {};
+    var i = 0;
+    images['black'] = new Image();
+    images['black'].onload = () => { 
+                              if(i++ >= 1) this.setState({images: images});
+                            }
+    images['white'] = new Image();
+    images['white'].onload = () => { 
+                              if(i++ >= 1) this.setState({images: images});
+                            }
+    images['black'].src = black;
+    images['white'].src = white;       
+
   }
 
   updateView(resp) {
@@ -56,61 +81,25 @@ class Othello extends React.Component {
           });
   }
 
-  renderDiscs(colors) {
-    return (
-      <div>
-        <Row>
-          {_.map(colors, (color, index) =>
-            <Disc key={index}
-              index={index}
-              color={color}
-              onClick={this.state.lock ? null : this.move}
-              parent={this}
-              />)}
-        </Row>
-      </div>
-    )
-  }
-
   render() {
     // TODO
+    let i = 0;
+    const discs = this.state.colors.map(color => { 
+                                          return (<Disc 
+                                                    key={i}
+                                                    color={color}
+                                                    onClick={this.state.lock ? null : this.move}
+                                                    parent={this}
+                                                    index={i++} 
+                                                    images={this.state.images}
+                                                    />);
+                                        });
     return (
-      <div>
-        <Container>
-          <Row>
-            <Col lg="8">
-              {this.renderDiscs(this.state.colors)}
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
-
-class Discs extends React.Component {
-  render() {
-    let color = this.props.color == 1 ? 'black' : 'grey';
-    let opacity = this.props.color == 0 ? 0 : 1;
-    let index = this.props.index;
-    const radius = 20;
-    let y = Math.floor(index/8)*radius*2+radius;
-    let x = index%8*radius*2+radius;
-    let parent = this.props.parent;
-    let onClick = null;
-    if(this.props.onClick) {
-      onClick = () => {this.props.move(index, parent);}
-    }
-
-    return (
-      <Circle
-        radius={radius-2}
-        fill={color}
-        opacity={opacity}
-        x={x}
-        y={y}
-        onClick={onClick}
-      />
+      <Stage width={400} height={400} fill={'green'}>
+        <Layer>
+          {discs}
+        </Layer>
+      </Stage>
     );
   }
 }

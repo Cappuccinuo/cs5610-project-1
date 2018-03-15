@@ -1,46 +1,36 @@
-import React, {Component} from 'react';
+import React                                                          from 'react';
+import ReactDOM                                                       from 'react-dom';
+import { Circle } from 'react-konva';
 
-export default function(props) {
+export default class Disc extends React.Component {
   //let black = '../assets/static/images/black.png';
   //let white = '../assets/static/images/white.png';
-  let black = '/images/black.png';
-  let white = '/images/white.png';
-  var blackDisc = {
-    backgroundImage: 'url(' + black + ')',
-    width: 90,
-    height: 70,
-  }
-  var whiteDisc = {
-    backgroundImage: 'url('+ black +')',
-    width: 90,
-    height: 70
-  }
 
-  const colornow = (color) => {
-    if (color == 1) {
-      return blackDisc;
+  render() {
+    
+    //FIXME
+    let opacity = this.props.color == 0 ? 0 : 1;
+    let index = this.props.index;
+    const radius = 25;
+    let y = Math.floor(index/8)*radius*2+radius;
+    let x = index%8*radius*2+radius;
+    let parent = this.props.parent;
+    let images = this.props.images;
+    let onClick = null;
+    if(this.props.onClick) {
+      onClick = () => {this.props.onClick(index, parent);}
     }
-    else if (color == 2) {
-      return whiteDisc;
-    }
-    else {
-      return whiteDisc;
-    }
-  }
 
-  let parent = props.parent;
-  let index = props.index;
-  let onClick = null;
-  if(props.onClick) {
-    onClick = () => {props.move(index, parent);}
+    return (
+      <Circle
+        radius={radius-2}
+        fillPatternImage={this.props.color == 1 ? images.black : images.white}
+        fillPatternOffset={{x: x, y: y}}
+        opacity={opacity}
+        x={x}
+        y={y}
+        onClick={onClick}
+      />
+    );
   }
-
-  return (
-    <div>
-      <div className="disc"
-        style={colornow(props.color)}
-        onClick={onClick}>
-      </div>
-    </div>
-  );
 }

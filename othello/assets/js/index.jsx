@@ -1,6 +1,6 @@
 import React                                                          from 'react';
 import ReactDOM                                                       from 'react-dom';
-import Logo                                                           from './components/logo'
+import Logo                                                           from './components/logo.js';
 
 export default function run_index(root) {
   ReactDOM.render(<Index />, root);
