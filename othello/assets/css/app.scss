@@ -1,22 +1,129 @@
 /* This file is for your main application css. */
 @import "bootstrap";
 @import url(https://use.fontawesome.com/releases/v5.0.8/css/all.css);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed);
+h1 {
+  text-align: center;
+}
 
-h1 { text-align: center; }
+body {
+  margin: 0;
+  background: #F1F4F3;
+  font-family: Georgia,Times,Times New Roman,serif; ;
+}
+
+.button_base {
+    margin: 0;
+    border: 0;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-left: 0px;
+    width: 150px;
+    height: 50px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.button_base:hover {
+    text-align: center;
+    cursor: pointer;
+}
+
+.electric {
+    color: #000000;
+    //font-family: 'Merriweather', serif;
+    font-family: "impact", Charcoal, sans-serif;
+    //font-weight: bold;
+    background-color: #F1F4F3;
+    padding: 10px;
+    transition: all 0.1s ease;
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    margin-bottom: 10px;
+}
+
+.electric:hover {
+    color: #ffffff;
+    background-color: #000000;
+    animation: b09_electric_blinkIn 0.1s step-end 0 2;
+    -webkit-animation: b09_electric_blinkIn 0.1s step-end 0 2;
+    -moz-animation: b09_electric_blinkIn 0.1s step-end 0 2;
+    transition: all 0.2s ease 0.2s;
+    -webkit-transition: all 0.2s ease 0.2s;
+    -moz-transition: all 0.2s ease 0.2s;
+}
+
+@-webkit-keyframes electric_blinkIn {
+    from,
+    to {
+        background-color: #f8f8f8;
+        color: #080808;
+    }
+    50% {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+@-moz-keyframes electric_blinkIn {
+    from,
+    to {
+        background-color: #f8f8f8;
+        color: #080808;
+    }
+    50% {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+.title {
+  //font-family: "impact", Charcoal, sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 40px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  letter-spacing: -1px;
+  line-height: 1;
+  text-align: center;
+}
+
+.gameinput {
+  position: relative;
+}
+.gameinput div {
+  position: absolute;
+  top: 100;
+  left: -100%;
+  width: 100%;
+  overflow: hidden;
+}
+.gameinput div.active {
+  left:0;
+  position: relative;
+}
+
 #home_index {
-  margin-top: 100px;
+  margin-top: 35px;
   text-align: center;
 }
 .logo {
-  margin-bottom: 50px;
+  margin-bottom: 20px;
+}
+
+.othello {
+  font-family: 'Rouge Script';
+
+  font-size: 45px;
+  font-weight: bold;
+  text-transform:uppercase;
 }
 .input {
   width: 40%;
-  margin: auto;
-  margin-top: 40px;
-}
-.join {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 a:link {
     color: black;
@@ -40,4 +147,8 @@ a:active {
   border-width: 1px;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.github {
+  margin-top: 20px;
 }

@@ -31,20 +31,44 @@ class Index extends React.Component {
       <div id="home_index" className="view-container">
         <header>
           <Logo />
-          <h1>Welcome to <a target="_blank" href="https://en.wikipedia.org/wiki/Othello">Othello</a></h1>
+          <h1 className="title">Welcome to <a className="othello" target="_blank" href="https://en.wikipedia.org/wiki/Othello">Othello</a></h1>
         </header>
 
-        <form onSubmit={function(e) {
+        <button className="button_base electric" onClick={function(e) {
+            e.preventDefault();
+            if ($('.gameinput div').hasClass('active')) {
+              $('.gameinput div').removeClass('active');
+            }
+            else {
+              $('.gameinput div').addClass('active');
+            }
+          }}>
+          <span>New Game</span>
+        </button>
+
+        <form className="gameinput" onSubmit={function(e) {
             e.preventDefault();
             window.location=link;
           }}>
-            <div className="input">
-              <input onKeyUp={this.handleChange} placeholder={'Enter game name'}/>
-              <button id="enter" type="submit" color='success'>Join Game</button>
-            </div>
+
+          <div className="input">
+            <input onKeyUp={this.handleChange} placeholder={'Enter room name'}/>
+            <button id="enter" type="submit" color='success'>Create</button>
+          </div>
         </form>
 
-        <footer>
+        <div>
+          <button className="button_base electric">
+            <span>Join Game</span>
+          </button>
+        </div>
+        <div>
+          <button className="button_base electric">
+            <span>Watch Game</span>
+          </button>
+        </div>
+
+        <footer className="github">
           <p><a target="_blank" href="https://github.com/YuqingCheng/cs5610-project-1"><i className="fab fa-github"/> source code</a></p>
         </footer>
       </div>

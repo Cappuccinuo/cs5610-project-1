@@ -5,7 +5,7 @@ export default class Logo extends React.Component {
     return (
       <img className="logo"
         style={{width: 150, justifyContent: 'center', alignItems: 'center'}}
-        src="https://www.sfstl.com/wp-content/themes/shakespeare/layout/images/othello-poster.jpg"/>
+        src="/images/logo.png"/>
     );
   }
 }

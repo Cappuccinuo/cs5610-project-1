@@ -37,11 +37,3 @@
     </table>
   <% end %>
 </div>
-
-<script>
-    $(document).keypress(function(event) {
-      if (event.keyCode == 13) {
-        window.location=document.getElementById('enter').href;
-      }
-    });
-</script>
