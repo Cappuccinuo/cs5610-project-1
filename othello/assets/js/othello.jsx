@@ -30,16 +30,21 @@ class Othello extends React.Component {
 
     this.loadImages();
 
-    channel.join()
-      .receive("ok", resp => this.updateView(resp))
-      .receive("error", resp => { console.log("Unable to join", resp); });
-
     channel.on("new:state", resp => this.updateView(resp));
 
     channel.on("new:player", resp => {
-      NotificationManager.success('New player joined', '');
       this.updateView(resp);
+      NotificationManager.success('New player joined', '');
     });
+
+    channel.on("new:speculator", resp => {
+      this.updateView(resp);
+      NotificationManager.info('New speculator joined', '');
+    });
+
+    channel.join()
+      .receive("ok", resp => this.updateView(resp))
+      .receive("error", resp => { console.log("Unable to join", resp); });
 
     this.updateView.bind(this);
     this.move.bind(this);
@@ -123,6 +128,7 @@ class Othello extends React.Component {
             <Info />
           </aside>
         </div>
+        <NotificationContainer />
       </div>
     );
   }

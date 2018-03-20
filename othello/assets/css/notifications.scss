@@ -1,0 +1,80 @@
+@import 'variables';
+// attribution of notification style goes to example code of react-notifications by minhtranite:
+// https://github.com/minhtranite/react-notifications
+
+
+.notification-container {
+  box-sizing: border-box;
+  position: fixed;
+  top: $react-notifications-container-top;
+  right: $react-notifications-container-right;
+  z-index: $react-notifications-container-z-index;
+  width: $react-notifications-container-width;
+  padding: $react-notifications-container-top-padding $react-notifications-container-right-padding;
+  max-height: $react-notifications-container-max-height;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.notification {
+  box-sizing: border-box;
+  padding: $react-notifications-padding-top $react-notifications-padding-right $react-notifications-padding-bottom $react-notifications-padding-left;
+  border-radius: $react-notifications-border-radius;
+  color: $react-notifications-color;
+  background-color: $react-notifications-background-color;
+  box-shadow: $react-notifications-box-shadow;
+  cursor: $react-notifications-cursor;
+  font-size: $react-notifications-font-size;
+  line-height: $react-notifications-line-height;
+  position: relative;
+  opacity: $react-notifications-opacity;
+  margin-top: $react-notifications-margin-top;
+  .title {
+    font-size: $react-notifications-title-font-size;
+    line-height: $react-notifications-title-line-height;
+    font-weight: $react-notifications-title-font-weight;
+    margin: $react-notifications-title-margin;
+  }
+  &:hover, &:focus {
+    opacity: $react-notifications-hover-opacity;
+  }
+}
+
+.notification-enter {
+  visibility: hidden;
+  transform: translate3d(100%, 0, 0);
+}
+
+.notification-enter.notification-enter-active {
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  transition: all $react-notifications-transition-time;
+}
+
+.notification-leave {
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+}
+
+.notification-leave.notification-leave-active {
+  visibility: hidden;
+  transform: translate3d(100%, 0, 0);
+  transition: all $react-notifications-transition-time;
+}
+
+
+.notification-info {
+  background-color: $react-notifications-info-background-color;
+}
+
+.notification-success {
+  background-color: $react-notifications-success-background-color;
+}
+
+.notification-warning {
+  background-color: $react-notifications-warning-background-color;
+}
+
+.notification-error {
+  background-color: $react-notifications-error-background-color;
+}
