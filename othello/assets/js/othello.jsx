@@ -95,21 +95,29 @@ class Othello extends React.Component {
                                                     images={this.state.images}
                                                     />);
                                         });
+    let name = window.gameName;
     return (
-      <Container>
-        <Row>
-          <Col xs="12" lg="8">
-            <Stage width={400} height={400} fill={'green'}>
-              <Layer>
-                {discs}
-              </Layer>
-            </Stage>
-          </Col>
-          <Col xs="12" lg="4">
+      <div id="main_container">
+        <div id="game_show" className="view-container">
+          <section id="main_section">
+            <header id="game_header">
+              <h1>
+                Othello: {name}
+              </h1>
+            </header>
+            <section id="boards_container">
+              <Stage width={400} height={400} fill={'green'}>
+                <Layer>
+                  {discs}
+                </Layer>
+              </Stage>
+            </section>
+          </section>
+          <aside id="info_container">
             <Info />
-          </Col>
-        </Row>
-      </Container>
+          </aside>
+        </div>
+      </div>
     );
   }
 }

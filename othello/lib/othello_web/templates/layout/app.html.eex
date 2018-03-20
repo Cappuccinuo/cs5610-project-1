@@ -21,7 +21,7 @@
               <%= link "Log Out", to: "/session", method: :delete %>
             </p>
           <% else %>
-            Not logged in. | 
+            Not logged in. |
             <%= link "Log in", to: "/login" %>
           <% end %>
         </div>
@@ -33,11 +33,11 @@
         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <% end %>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
+
+
 
     </div> <!-- /container -->
+    <%= render @view_module, @view_template, assigns %>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

@@ -4,7 +4,7 @@ export default class Info extends React.Component {
   // Userinfo
   render() {
     return (
-      <div>
+      <div className="sidebar">
         <div className="userinfo">
           <p>UserInfo: Show the two players name</p>
         </div>
@@ -19,9 +19,6 @@ export default class Info extends React.Component {
           <p>Who's turn</p>
         </div>
         <div>
-          <div>
-            <button>Reset</button>
-          </div>
           <div>
             <button>Exit(May delete the game)</button>
           </div>
