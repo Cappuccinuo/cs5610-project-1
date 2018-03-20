@@ -4,7 +4,8 @@ import { Stage, Layer, Rect, Text, Circle }                           from 'reac
 import Konva                                                          from 'konva';
 import { Button, Container, Row, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 import Disc                                                           from './components/disc.jsx';
-import Info                                                           from "./info.jsx"
+import Info                                                           from "./info.jsx";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 export default function run_othello(root, channel) {
   ReactDOM.render(<Othello channel={channel}/>, root);
@@ -33,7 +34,12 @@ class Othello extends React.Component {
       .receive("ok", resp => this.updateView(resp))
       .receive("error", resp => { console.log("Unable to join", resp); });
 
+    channel.on("new:state", resp => this.updateView(resp));
 
+    channel.on("new:player", resp => {
+      NotificationManager.success('New player joined', '');
+      this.updateView(resp);
+    });
 
     this.updateView.bind(this);
     this.move.bind(this);
