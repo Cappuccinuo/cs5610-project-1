@@ -8,6 +8,7 @@ defmodule OthelloWeb.Gamechannel do
       curr_name = name
       game = Game.join_game(curr_name, current_user)
       socket = assign(socket, :curr_name, curr_name)
+      send(self, {:after_join, game})
       {:ok, %{"state" => game}, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -20,11 +21,16 @@ defmodule OthelloWeb.Gamechannel do
     curr_name = socket.assigns.curr_name
     case Game.simulate_next_state(curr_name, i) do
       {true, game} ->
+        broadcast! socket, "new:state", %{"state" => game}
         {:reply, {:ok, %{"state" => game}}, socket}
       {false, game} ->
         {:reply, {:error, %{"state" => game}}, socket}
     end
+  end
 
+  def handle_info({:after_join, game}, socket) do
+    broadcast! socket, "new:player", %{"state" => game}
+    {:noreply, socket}
   end
 
 
