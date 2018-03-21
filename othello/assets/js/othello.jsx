@@ -82,7 +82,7 @@ class Othello extends React.Component {
   move(index, that) {
     console.log("clicked!");
     that.setState({
-      lock: false, //FIXME
+      lock: true,
     });
     that.props.channel.push("move", {index: index})
           .receive("ok", resp => that.updateView(resp))
