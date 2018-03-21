@@ -58,12 +58,18 @@ class Index extends React.Component {
         </form>
 
         <div>
-          <button className="button_base electric">
+          <button className="button_base electric" onClick={function(e) {
+              e.preventDefault();
+              window.location = "/lobby";
+            }}>
             <span>Join Game</span>
           </button>
         </div>
         <div>
-          <button className="button_base electric">
+          <button className="button_base electric" onClick={function(e) {
+              e.preventDefault();
+              window.location = "/lobby";
+            }}>
             <span>Watch Game</span>
           </button>
         </div>

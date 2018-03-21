@@ -19,6 +19,7 @@ defmodule OthelloWeb.Router do
 
     get "/", PageController, :index
     get "/login", PageController, :login
+    get "/lobby", PageController, :lobby
     get "/game/:game", PageController, :game
 
     post "/session", SessionController, :create

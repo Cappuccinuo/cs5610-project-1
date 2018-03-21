@@ -7,6 +7,11 @@ defmodule OthelloWeb.PageController do
     render conn, "index.html", games: games
   end
 
+  def lobby(conn, _params) do
+    games = Game.get_all_games
+    render conn, "lobby.html", games: games
+  end
+
   def game(conn, params) do
     curr_game = Game.get_state params["game"]
     user_name = get_session(conn, :user_name)
