@@ -32,14 +32,13 @@ class Othello extends React.Component {
 
     channel.on("new:state", resp => this.updateView(resp));
 
-    channel.on("new:player", resp => {
+    channel.on("new:user", resp => {
       this.updateView(resp);
-      NotificationManager.success('New player joined', '');
-    });
-
-    channel.on("new:speculator", resp => {
-      this.updateView(resp);
-      NotificationManager.info('New speculator joined', '');
+      if(resp["type"] == "success") {
+        NotificationManager.success(resp.msg, '');
+      } else if(resp["type"] == "info") {
+        NotificationManager.info(resp.msg, '');
+      }
     });
 
     channel.join()

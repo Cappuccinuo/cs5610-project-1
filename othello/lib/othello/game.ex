@@ -18,7 +18,7 @@ defmodule Othello.Game do
         # only one player in room
         if Enum.member? curr_game.players, user_name do
           # already first player
-          curr_game
+          %{"state" => curr_game, "msg" => user_name <> "is back.", "type" => "success"}
         else
           # second player
           curr_game = %{curr_game | players: curr_game.players ++ [user_name]}
@@ -30,25 +30,29 @@ defmodule Othello.Game do
           curr_game = %{curr_game | colors: colors}
           new_games = %{games | curr_name => curr_game}
           :ok = Agent.update(:games, fn last -> new_games end)
-          curr_game
+          %{"state" => curr_game, "msg" => user_name <> " joined game.", "type" => "success"}
         end
       else
         # two players in room
         if Enum.member? curr_game.players, user_name do
           # already a player
-          curr_game
+          %{"state" => curr_game, "msg" => user_name <> " is back.", "type" => "success"}
         else
           # speculator
-          curr_game = %{curr_game | speculators: curr_game.speculators ++ [user_name]}
-          new_games = %{games | curr_name => curr_game}
-          :ok = Agent.update(:games, fn last -> new_games end)
-          curr_game
+          if String.length(user_name) > 0 do
+            curr_game = %{curr_game | speculators: curr_game.speculators ++ [user_name]} 
+            new_games = %{games | curr_name => curr_game}
+            :ok = Agent.update(:games, fn last -> new_games end)
+            %{"state" => curr_game, "msg" => user_name <> " is watching.", "type" => "info"}
+          else
+            %{"state" => curr_game, "msg" => "Anonymous is watching.", "type" => "info"}
+          end 
         end
       end
     else
       new_games = Map.put(games, curr_name, new_game(user_name))
       :ok = Agent.update(:games, fn last -> new_games end)
-      new_game(user_name)
+      %{"state" => new_game(user_name), "msg" => user_name <> " joined game.", "type" => "success"}
     end
   end
 

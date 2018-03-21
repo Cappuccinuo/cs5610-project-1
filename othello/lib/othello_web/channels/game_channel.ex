@@ -6,10 +6,10 @@ defmodule OthelloWeb.Gamechannel do
     if authorized?(payload) do
       current_user = socket.assigns.current_user
       curr_name = name
-      game = Game.join_game(curr_name, current_user)
+      resp = Game.join_game(curr_name, current_user)
       socket = assign(socket, :curr_name, curr_name)
-      send(self, {:after_join, game})
-      {:ok, %{"state" => game}, socket}
+      send(self, {:after_join, resp})
+      {:ok, %{"state" => resp["state"]}, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
@@ -28,8 +28,8 @@ defmodule OthelloWeb.Gamechannel do
     end
   end
 
-  def handle_info({:after_join, game}, socket) do
-    broadcast! socket, "new:player", %{"state" => game}
+  def handle_info({:after_join, resp}, socket) do
+    broadcast! socket, "new:user", resp
     {:noreply, socket}
   end
 
