@@ -27,11 +27,11 @@ if [ -d ~/www/othello ]; then
 fi
 
 mkdir -p ~/www/othello
-REL_TAR=~/src/othello/_build/prod/rel/othello/releases/0.0.1/othello.tar.gz
+REL_TAR=~/cs5610-project-1/othello/_build/prod/rel/othello/releases/0.0.1/othello.tar.gz
 (cd ~/www/othello && tar xzvf $REL_TAR)
 
 crontab - <<CRONTAB
-@reboot bash /home/othello/src/othello/start.sh
+@reboot bash /home/othello/cs5610-project-1/othello/start.sh
 CRONTAB
 
 #. start.sh
