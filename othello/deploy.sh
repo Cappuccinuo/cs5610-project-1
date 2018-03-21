@@ -2,7 +2,7 @@
 
 export PORT=5103
 export MIX_ENV=prod
-export GIT_PATH=/home/othello/src/othello
+export GIT_PATH=/home/othello/cs5610-project-1/othello
 
 PWD=`pwd`
 if [ $PWD != $GIT_PATH ]; then
