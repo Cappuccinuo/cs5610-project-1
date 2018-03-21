@@ -1,32 +1,43 @@
 <%= if Kernel.length(Map.keys(@games)) != 0 do %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Game</th>
-        <th>Players</th>
-        <th>Number of Speculators</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-  <%= for {name, state} <- @games do %>
-      <tr>
-        <td><%= name %></td>
-        <%= if Kernel.length(state.players) == 1 do %>
-          <td><%= List.first(state.players) %> is waiting for a match</td>
-        <% else %>
-          <td><%= List.first(state.players) %> vs <%= List.last(state.players) %></td>
-        <% end %>
-        <td><%= Kernel.length(state.speculators) %></td>
-        <td>
-        <%= if Kernel.length(state.players) < 2 || Enum.member?(state.players, @current_user) do %>
-          <span><%= link "Join Game", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
-        <% else %>
-          <span><%= link "Speculate", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
-        <% end %>
-        </td>
-      </tr>
-  <% end %>
-    </tbody>
-  </table>
+<div class="lobby container-login100" style="background-image: url('/images/bg-01.jpg');">
+  <div class="table100 ver3 m-b-110">
+		<div class="table100-head">
+			<table>
+				<thead>
+					<tr class="row100 head">
+						<th class="cell100 column1">Game</th>
+						<th class="cell100 column2">Status</th>
+						<th class="cell100 column3">Number of Speculators</th>
+						<th class="cell100 column4"></th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+		<div class="table100-body js-pscroll">
+			<table>
+				<tbody>
+          <%= for {name, state} <- @games do %>
+  					<tr class="row100 body">
+  						<td class="cell100 column1"><%= name %></td>
+              <%= if Kernel.length(state.players) == 1 do %>
+                <td class="cell100 column2"><%= List.first(state.players) %> is waiting for a match</td>
+              <% else %>
+                <td class="cell100 column2"><%= List.first(state.players) %> vs <%= List.last(state.players) %></td>
+              <% end %>
+  						<td class="cell100 column3"><%= Kernel.length(state.speculators) %></td>
+              <td class="cell100 column4">
+              <%= if Kernel.length(state.players) < 2 || Enum.member?(state.players, @current_user) do %>
+                <span><%= link "Join Game", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
+              <% else %>
+                <span><%= link "Speculate", to: page_path(@conn, :game, name), class: "btn btn-default btn-xs" %></span>
+              <% end %>
+              </td>
+  					</tr>
+          <% end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
 <% end %>

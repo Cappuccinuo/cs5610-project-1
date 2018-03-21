@@ -31,7 +31,7 @@ class Index extends React.Component {
       <div id="home_index" className="view-container">
         <header>
           <Logo />
-          <h1 className="title">Welcome to <a className="othello" target="_blank" href="https://en.wikipedia.org/wiki/Othello">Othello</a></h1>
+          <h1 className="title">Welcome to <a className="othello" target="_blank" href="https://en.wikipedia.org/wiki/Reversi">Othello</a></h1>
         </header>
 
         <button className="button_base electric" onClick={function(e) {
@@ -43,7 +43,7 @@ class Index extends React.Component {
               $('.gameinput div').addClass('active');
             }
           }}>
-          <span>New Game</span>
+          <span>Join Game</span>
         </button>
 
         <form className="gameinput" onSubmit={function(e) {
@@ -53,7 +53,7 @@ class Index extends React.Component {
 
           <div className="input">
             <input onKeyUp={this.handleChange} placeholder={'Enter room name'}/>
-            <button id="enter" type="submit" color='success'>Create</button>
+            <button id="enter" type="submit" color='success'>Join</button>
           </div>
         </form>
 
@@ -62,15 +62,7 @@ class Index extends React.Component {
               e.preventDefault();
               window.location = "/lobby";
             }}>
-            <span>Join Game</span>
-          </button>
-        </div>
-        <div>
-          <button className="button_base electric" onClick={function(e) {
-              e.preventDefault();
-              window.location = "/lobby";
-            }}>
-            <span>Watch Game</span>
+            <span>Game Lobby</span>
           </button>
         </div>
 

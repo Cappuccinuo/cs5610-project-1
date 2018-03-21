@@ -192,6 +192,7 @@ div {
 }
 
 .gameinput {
+  text-align: center;
   position: relative;
 }
 .gameinput div {
@@ -238,7 +239,7 @@ a:hover {
     text-decoration: none;
 }
 a:active {
-    color: blue;
+    color: gray;
     text-decoration: none;
 }
 .disc {
@@ -251,4 +252,13 @@ a:active {
 
 .github {
   margin-top: 20px;
+}
+
+.lobby {
+  text-align: center;
+}
+
+#enter {
+  width: 50px;
+  height: 50px;
 }
