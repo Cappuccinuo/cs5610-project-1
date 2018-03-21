@@ -171,8 +171,9 @@ defmodule Othello.Game do
     curr_j = rem(curr, 8)
     next_i = div(next, 8)
     next_j = rem(next, 8)
-    res = (next_j - curr_j) * (next_i - curr_i)
-    next >= 0 && next < 64 && res >= -1 && res <= 1
+    diff_j = (next_j - curr_j)
+    diff_i = (next_i - curr_i)
+    next >= 0 && next < 64 && diff_j >= -1 && diff_j <= 1 && diff_i >= -1 && diff_i <= 1
   end 
 
   def valid_next(colors, curr, next, target) do
