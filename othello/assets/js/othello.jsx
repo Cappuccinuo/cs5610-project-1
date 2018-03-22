@@ -70,11 +70,19 @@ class Othello extends React.Component {
   updateView(resp) {
     console.log("update state", resp);
     this.setState(resp.state);
+    if(resp.state.winner != null) {
+      alert(resp.state.players[resp.state.winner]+" wins!");
+    }
+    
     const players = this.state.players;
     const turn = this.state.turn
 
     if(window.userToken == players[turn]) {
       this.setState({lock: false});
+    }
+
+    if(!resp["type"] && resp.msg) {
+      alert(resp.msg);
     }
   }
 

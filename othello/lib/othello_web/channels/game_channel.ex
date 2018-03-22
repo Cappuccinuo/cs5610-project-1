@@ -20,11 +20,11 @@ defmodule OthelloWeb.Gamechannel do
   def handle_in("move", %{"index" => i}, socket) do
     curr_name = socket.assigns.curr_name
     case Game.simulate_next_state(curr_name, i) do
-      {true, game} ->
-        broadcast! socket, "new:state", %{"state" => game}
-        {:reply, {:ok, %{"state" => game}}, socket}
-      {false, game} ->
-        {:reply, {:error, %{"state" => game}}, socket}
+      {true, resp} ->
+        broadcast! socket, "new:state", resp
+        {:reply, {:ok, resp}, socket}
+      {false, resp} ->
+        {:reply, {:error, resp}, socket}
     end
   end
 

@@ -74,11 +74,11 @@ defmodule Othello.Game do
   end
 
   # update a game state in Agent
-  def update_state(state, curr_name) do
+  def update_state(resp, curr_name) do
     games = get_all_games
-    new_games = %{games | curr_name => state}
+    new_games = %{games | curr_name => resp["state"]}
     :ok = Agent.update(:games, fn last -> new_games end)
-    state
+    resp
   end
 
   # ticks to next state
@@ -87,13 +87,12 @@ defmodule Othello.Game do
     curr_game = get_state(curr_name)
     colors = curr_game.colors
     player = curr_game.turn+1
+    resp = %{"state" => curr_game}
     case update_colors(colors, player, index) do
-      {true, colors} -> {true, curr_game 
-                                |> Map.put(:colors, colors) # update colors
-                                |> Map.put(:turn, 1 - curr_game.turn) # update turn
-                                |> check_win
+      {true, curr_colors} -> {true, resp 
+                                |> check_turn_and_win(curr_colors)
                                 |> update_state(curr_name)}
-      _ -> {false, curr_game}
+      _ -> {false, resp}
     end
   end
 
@@ -161,9 +160,86 @@ defmodule Othello.Game do
     end
   end
 
-  def check_win(state) do
+  def check_turn_and_win(resp, colors) do
     # TODO
-    state
+    game = resp["state"]
+    player = 1 - game.turn
+    curr_game = %{game | colors: colors}
+    pre_winner = winner colors
+    if pre_winner >= 0 do
+      # has a winner
+      %{resp | "state" => %{curr_game | winner: pre_winner}}
+    else
+      # no winner
+      if has_next_move(colors, player+1, 0) do
+        # next player can move
+        %{resp | "state" => %{curr_game | turn: player}}
+      else
+       # next player cannot move
+        if !has_next_move(colors, game.turn+1, 0) do
+          # current player cannot move, too
+          {zeroes, ones, twos} = get_num_colors({0, 0, 0}, colors, 0)
+          if ones > twos do
+            %{resp | "state" => %{curr_game | winner: 0}} # player 0 wins
+          else
+            if ones < twos do
+              %{resp | "state" => %{curr_game | winner: 1}} # player 1 wins
+            else
+              %{resp | "state" => %{curr_game | winner: 2}} # ties
+            end
+          end
+        else
+          # current player can move
+          {:ok, player_name} = Enum.fetch(game.players, game.turn)
+          resp = %{resp | "state" => curr_game}
+          Map.update(resp, "msg", "Opponent cannot move, still " <> player_name <> "'s turn", &(&1))
+        end
+      end
+    end
+  end
+
+  def winner(colors) do
+    {zeroes, ones, twos} = get_num_colors({0, 0, 0}, colors, 0)
+    if zeroes == 0 do
+      if ones > twos do
+        0 # player 0 wins
+      else
+        if ones < twos do
+          1 # player 1 wins
+        else
+          2 # ties
+        end
+      end
+    else
+      -1
+    end
+  end
+
+  def get_num_colors(counts, colors, index) do
+    if index >= 64 do
+      counts
+    else
+      {zeroes, ones, twos} = counts
+      {:ok, color} = Enum.fetch(colors, index)
+      if color == 0 do
+          get_num_colors({zeroes+1, ones, twos}, colors, index+1)
+      else
+        if color == 1 do
+          get_num_colors({zeroes, ones+1, twos}, colors, index+1)
+        else
+          get_num_colors({zeroes, ones, twos+1}, colors, index+1)
+        end
+      end
+    end
+  end
+
+  def has_next_move(colors, player, index) do
+    if index >= 64 do
+      false
+    else
+      {next_move_found, new_colors} = update_colors(colors, player, index)
+      next_move_found || has_next_move(colors, player, index+1)
+    end
   end
 
   def in_bound(curr, next) do
