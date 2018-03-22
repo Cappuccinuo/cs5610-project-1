@@ -1,7 +1,7 @@
 import React                                                          from 'react';
 import ReactDOM                                                       from 'react-dom';
-import { Stage, Layer, Rect, Text, Circle }                           from 'react-konva';
-import Konva                                                          from 'konva';
+import { Stage, Layer, Rect, Text, Circle, Line }                           from 'react-konva';
+import Konva                                                         from 'konva';
 import { Button, Container, Row, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 import Disc                                                           from './components/disc.jsx';
 import Info                                                           from "./info.jsx";
@@ -52,18 +52,24 @@ class Othello extends React.Component {
   loadImages() {
     let black = '/images/black.png';
     let white = '/images/white.png';
+    let board = '/images/wood-board.png';
     var images = {};
     var i = 0;
     images['black'] = new Image();
     images['black'].onload = () => {
-                              if(i++ >= 1) this.setState({images: images});
+                              if(i++ >= 2) this.setState({images: images});
                             }
     images['white'] = new Image();
     images['white'].onload = () => {
-                              if(i++ >= 1) this.setState({images: images});
+                              if(i++ >= 2) this.setState({images: images});
                             }
+    images['board'] = new Image();
+    images['board'].onload = () => {
+                              if(i++ >= 2) this.setState({images: images});
+                            }                     
     images['black'].src = black;
     images['white'].src = white;
+    images['board'].src = board;
 
   }
 
@@ -114,6 +120,27 @@ class Othello extends React.Component {
                                                     />);
                                         });
     let name = window.gameName;
+
+    let lines = [];
+
+    for(var j = 1; j < 8; j++) {
+      var lineX = (<Line 
+                    key={j}
+                    points={[j*50, 0, j*50, 400]}
+                    stroke={'white'}
+                    stokeWidth={1}
+                    closed={true}
+                  />);
+      var lineY = (<Line 
+                    key={j+7}
+                    points={[0, j*50, 400,j*50]}
+                    stroke={'white'}
+                    stokeWidth={1}
+                    closed={true}
+                  />);
+      lines.push(lineX);
+      lines.push(lineY);
+    }
     return (
       <div id="main_container">
         <div id="game_show" className="view-container">
@@ -124,10 +151,19 @@ class Othello extends React.Component {
               </h1>
             </header>
             <section id="boards_container">
-              <Stage width={400} height={400} fill={'green'}>
-                <Layer>
-                  {discs}
-                </Layer>
+              <Stage width={400} height={400}>
+              <Layer>
+                <Rect 
+                  width={400}
+                  height={400}
+                  cornerRadius={8}
+                  fillPatternImage={this.state.images['board']}
+                  fillPatternScale={1}
+                  //fillPatternOffset={{x: x, y: y}}
+                />
+                {lines}
+                {discs}
+              </Layer>
               </Stage>
             </section>
           </section>
