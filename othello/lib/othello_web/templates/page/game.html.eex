@@ -3,6 +3,6 @@
   window.userToken = "<%= @current_user %>" == "" ? "Anonymous" : "<%= @current_user %>";
 </script>
 
-<div id="game">
+<div id="game" style="background-image: url('/images/bg-02.jpg');">
   Loading...
 </div>

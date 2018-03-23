@@ -5,7 +5,7 @@ export default class Info extends React.Component {
   render() {
     let currentState = this.props.status.state;
     let playerA = currentState.players[0];
-    let playerB = currentState.players[1];
+    let playerB = currentState.players[1] == null ? "Please wait for your opponent." : currentState.players[1];
     let turn = currentState.turn;
     let currentPlayer = currentState.players[turn];
     let i = 0;
@@ -15,12 +15,12 @@ export default class Info extends React.Component {
     return (
       <div className="sidebar">
         <div className="userinfo">
-          <p>UserInfo: Show the two players name</p>
+          <p>Players:</p>
           <p>{playerA}</p>
           <p>{playerB}</p>
         </div>
         <div className="speculatorinfo">
-          <p>Speculator: Show current speculators name</p>
+          <p>Speculator:</p>
           {speculators}
         </div>
         <div className="score">

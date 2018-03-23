@@ -100,6 +100,10 @@ class Othello extends React.Component {
   }
 
   move(index, that) {
+    if (that.state.players.length < 2) {
+      swal("Oops!", "Please wait for your opponent", "error");
+      return;
+    }
     console.log("clicked!");
     that.setState({
       lock: true,
@@ -127,6 +131,8 @@ class Othello extends React.Component {
                                         });
     let name = window.gameName;
 
+    let player = window.userToken;
+
     let lines = [];
 
     for(var j = 1; j < 8; j++) {
@@ -148,12 +154,12 @@ class Othello extends React.Component {
       lines.push(lineY);
     }
     return (
-      <div id="main_container">
+      <div id="main_container" className="containergame">
         <div id="game_show" className="view-container">
           <section id="main_section">
             <header id="game_header">
               <h1>
-                Hi {window.userToken}, Othello: {name}
+                Hi {player}, Othello: {name}
               </h1>
             </header>
             <section id="boards_container">
