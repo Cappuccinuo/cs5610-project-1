@@ -1,11 +1,12 @@
 import React                                                          from 'react';
 import ReactDOM                                                       from 'react-dom';
-import { Stage, Layer, Rect, Text, Circle, Line }                           from 'react-konva';
-import Konva                                                         from 'konva';
+import { Stage, Layer, Rect, Text, Circle, Line }                     from 'react-konva';
+import Konva                                                          from 'konva';
 import { Button, Container, Row, Col, Form, FormGroup, Input, Label } from 'reactstrap';
 import Disc                                                           from './components/disc.jsx';
 import Info                                                           from "./info.jsx";
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationContainer, NotificationManager}                   from 'react-notifications';
+import swal                                                           from 'sweetalert';
 
 export default function run_othello(root, channel) {
   ReactDOM.render(<Othello channel={channel}/>, root);
@@ -66,7 +67,7 @@ class Othello extends React.Component {
     images['board'] = new Image();
     images['board'].onload = () => {
                               if(i++ >= 2) this.setState({images: images});
-                            }                     
+                            }
     images['black'].src = black;
     images['white'].src = white;
     images['board'].src = board;
@@ -77,18 +78,24 @@ class Othello extends React.Component {
     console.log("update state", resp);
     this.setState(resp.state);
     if(resp.state.winner != null) {
-      alert(resp.state.players[resp.state.winner]+" wins!");
+      if(resp.state.players[resp.state.winner] == window.userToken) {
+        swal("Game over!", resp.state.players[resp.state.winner]+", you wins!", "success");
+      }
+      else {
+        swal("Game over!", resp.state.players[~resp.state.winner + 2]+", keep fighting!", "warning");
+      }
     }
-    
+
     const players = this.state.players;
     const turn = this.state.turn
 
-    if(window.userToken == players[turn]) {
+    if(resp.state.winner == null && window.userToken == players[turn]) {
       this.setState({lock: false});
     }
 
     if(!resp["type"] && resp.msg) {
       alert(resp.msg);
+      swal("Info", resp.msg + "", "info")
     }
   }
 
@@ -100,8 +107,7 @@ class Othello extends React.Component {
     that.props.channel.push("move", {index: index})
           .receive("ok", resp => that.updateView(resp))
           .receive("error", resp => {
-            console.log("update state", resp);
-            alert("cannot move here");
+            swal("Oops!", "Cannot move here", "error");
             that.setState({lock: false});
           });
   }
@@ -124,14 +130,14 @@ class Othello extends React.Component {
     let lines = [];
 
     for(var j = 1; j < 8; j++) {
-      var lineX = (<Line 
+      var lineX = (<Line
                     key={j}
                     points={[j*50, 0, j*50, 400]}
                     stroke={'white'}
                     stokeWidth={1}
                     closed={true}
                   />);
-      var lineY = (<Line 
+      var lineY = (<Line
                     key={j+7}
                     points={[0, j*50, 400,j*50]}
                     stroke={'white'}
@@ -153,7 +159,7 @@ class Othello extends React.Component {
             <section id="boards_container">
               <Stage width={400} height={400}>
               <Layer>
-                <Rect 
+                <Rect
                   width={400}
                   height={400}
                   cornerRadius={8}
