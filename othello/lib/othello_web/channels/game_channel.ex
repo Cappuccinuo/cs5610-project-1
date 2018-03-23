@@ -28,6 +28,13 @@ defmodule OthelloWeb.Gamechannel do
     end
   end
 
+  def handle_in("restart", %{}, socket) do
+    curr_name = socket.assigns.curr_name
+    resp = Game.restart_game curr_name
+    broadcast! socket, "new:state", resp
+    {:reply, {:ok, resp}, socket}
+  end
+
   def handle_info({:after_join, resp}, socket) do
     broadcast! socket, "new:user", resp
     {:noreply, socket}
@@ -60,10 +67,6 @@ defmodule OthelloWeb.Gamechannel do
         socket
       end
     end
-  end
-
-  def handle_in("quit", %{}, socket) do
-
   end
 
 

@@ -104,6 +104,9 @@ class Othello extends React.Component {
         // show win to winner and speculators
         swal("Game over!", resp.state.players[resp.state.winner]+", you wins!", "success");     
       }
+      this.props.channel.push("restart", {})
+          .reveive("ok", resp => {});
+
     }
 
     const players = this.state.players;
@@ -114,7 +117,6 @@ class Othello extends React.Component {
     }
 
     if(!resp["type"] && resp.msg) {
-      alert(resp.msg);
       swal("Info", resp.msg + "", "info")
     }
   }

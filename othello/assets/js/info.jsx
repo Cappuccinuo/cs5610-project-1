@@ -8,10 +8,19 @@ export default class Info extends React.Component {
     let playerB = currentState.players[1] == null ? "Please wait for your opponent." : currentState.players[1];
     let turn = currentState.turn;
     let currentPlayer = currentState.players[turn];
+    let colors = currentState.colors;
     let i = 0;
     let speculators = currentState.speculators.map(speculator => {
                                           return (<p key={i++}>{speculator}</p>);
                                         });
+    let white = 0, black = 0;
+    for(var j = 0; j < colors.length; j++) {
+      if(colors[j] == 1) {
+        black++;
+      } else if(colors[j] == 2) {
+        white++;
+      }
+    }
     return (
       <div className="sidebar">
         <div className="userinfo">
@@ -24,8 +33,8 @@ export default class Info extends React.Component {
           {speculators}
         </div>
         <div className="score">
-          <p>White * how many</p>
-          <p>Black * how many</p>
+          <p>White * {white}</p>
+          <p>Black * {black}</p>
         </div>
         <div className="turn">
           <p>{currentPlayer}{"'s turn"}</p>

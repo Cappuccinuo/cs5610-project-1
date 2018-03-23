@@ -78,6 +78,18 @@ defmodule Othello.Game do
     get_all_games |> Map.get(curr_name)
   end
 
+  def restart_game(curr_name) do
+    game = get_state curr_name
+    next_game = new_game ""
+    next_game = %{next_game | players: game.players, speculators: game.speculators, online_players: game.online_players}
+    next_game = %{next_game | colors: next_game.colors 
+                                        |> List.update_at(27, fn _ -> 2 end)
+                                        |> List.update_at(28, fn _ -> 1 end)
+                                        |> List.update_at(35, fn _ -> 1 end)
+                                        |> List.update_at(36, fn _ -> 2 end)}
+    update_state %{"state" => next_game}, curr_name  
+  end
+
   # update a game state in Agent
   def update_state(resp, curr_name) do
     games = get_all_games
