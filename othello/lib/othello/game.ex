@@ -4,7 +4,7 @@ defmodule Othello.Game do
   # helper function to generate a new state with input user name as first player
   def new_game(user_name) do
     colors = for _ <- 1..64, do: 0
-    %{colors: colors, turn: 0, players: [user_name], winner: nil, speculators: []}
+    %{colors: colors, turn: 0, players: [user_name], winner: nil, speculators: [], online_players: 1}
   end
 
   # join game
@@ -21,12 +21,12 @@ defmodule Othello.Game do
           %{"state" => curr_game, "msg" => user_name <> "is back.", "type" => "success"}
         else
           # second player
-          curr_game = %{curr_game | players: curr_game.players ++ [user_name]}
+          curr_game = %{curr_game | players: curr_game.players ++ [user_name], online_players: 2}
           colors = curr_game.colors 
-                    |> List.update_at(27, fn _ -> 1 end)
-                    |> List.update_at(28, fn _ -> 2 end)
-                    |> List.update_at(35, fn _ -> 2 end)
-                    |> List.update_at(36, fn _ -> 1 end)
+                    |> List.update_at(27, fn _ -> 2 end)
+                    |> List.update_at(28, fn _ -> 1 end)
+                    |> List.update_at(35, fn _ -> 1 end)
+                    |> List.update_at(36, fn _ -> 2 end)
           curr_game = %{curr_game | colors: colors}
           new_games = %{games | curr_name => curr_game}
           :ok = Agent.update(:games, fn last -> new_games end)
@@ -50,6 +50,7 @@ defmodule Othello.Game do
         end
       end
     else
+      # first player
       new_games = Map.put(games, curr_name, new_game(user_name))
       :ok = Agent.update(:games, fn last -> new_games end)
       %{"state" => new_game(user_name), "msg" => user_name <> " joined game.", "type" => "success"}
@@ -79,6 +80,12 @@ defmodule Othello.Game do
     new_games = %{games | curr_name => resp["state"]}
     :ok = Agent.update(:games, fn last -> new_games end)
     resp
+  end
+
+  def delete_state(curr_name) do
+    games = get_all_games
+    new_games = Map.delete games, curr_name
+    Agent.update(:games, fn last -> new_games end)
   end
 
   # ticks to next state

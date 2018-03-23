@@ -42,6 +42,19 @@ class Othello extends React.Component {
       }
     });
 
+    channel.on("user:leave", resp => {
+      if(resp["type"] == "warning") {
+        swal("", resp.msg, resp["type"]);
+      }else{
+        NotificationManager.info(resp.msg, '');
+      }      
+    });
+
+    channel.on("table:close", resp => {
+      swal("", resp.msg, resp["type"]);
+      setTimeout(() => window.location.replace("/"), 1000);
+    });
+
     channel.join()
       .receive("ok", resp => this.updateView(resp))
       .receive("error", resp => { console.log("Unable to join", resp); });
@@ -78,11 +91,18 @@ class Othello extends React.Component {
     console.log("update state", resp);
     this.setState(resp.state);
     if(resp.state.winner != null) {
-      if(resp.state.players[resp.state.winner] == window.userToken) {
-        swal("Game over!", resp.state.players[resp.state.winner]+", you wins!", "success");
+      // winner == 0, 0 wins, winner == 1, 1 wins, winner == 2, ties
+      if(resp.state.winner == 2) {
+        // show game tie to all players and speculators
+        swal("Game over!", "Tie!", "info");
+      }
+      else if(resp.state.players[~resp.state.winner+2] == window.userToken) {
+        // only show lose info to loser
+        swal("Game over!", resp.state.players[~resp.state.winner + 2]+", keep fighting!", "warning"); 
       }
       else {
-        swal("Game over!", resp.state.players[~resp.state.winner + 2]+", keep fighting!", "warning");
+        // show win to winner and speculators
+        swal("Game over!", resp.state.players[resp.state.winner]+", you wins!", "success");     
       }
     }
 
@@ -104,7 +124,6 @@ class Othello extends React.Component {
       swal("Oops!", "Please wait for your opponent", "error");
       return;
     }
-    console.log("clicked!");
     that.setState({
       lock: true,
     });
@@ -114,6 +133,16 @@ class Othello extends React.Component {
             swal("Oops!", "Cannot move here", "error");
             that.setState({lock: false});
           });
+  }
+
+  quit() {
+    this.props.channel.push("quit", {})
+          .receive("ok", resp => {});
+  }
+
+  restart() {
+    this.props.channel.push("restart", {})
+          .reveive("ok", resp => {});
   }
 
   render() {
@@ -164,18 +193,18 @@ class Othello extends React.Component {
             </header>
             <section id="boards_container">
               <Stage width={400} height={400}>
-              <Layer>
-                <Rect
-                  width={400}
-                  height={400}
-                  cornerRadius={8}
-                  fillPatternImage={this.state.images['board']}
-                  fillPatternScale={1}
-                  //fillPatternOffset={{x: x, y: y}}
-                />
-                {lines}
-                {discs}
-              </Layer>
+                <Layer>
+                  <Rect
+                    width={400}
+                    height={400}
+                    cornerRadius={8}
+                    fillPatternImage={this.state.images['board']}
+                    fillPatternScale={1}
+                    //fillPatternOffset={{x: x, y: y}}
+                  />
+                  {lines}
+                  {discs}
+                </Layer>
               </Stage>
             </section>
           </section>
