@@ -62,7 +62,7 @@ class Index extends React.Component {
         <div>
           <button className="button_base electric" onClick={function(e) {
               e.preventDefault();
-              if (gameNum == 1) {
+              if (gameNum == 0) {
                 swal("Oops!", "Currently no game, start a new game now!", "warning");
                 $('.gameinput div').addClass('active');
               }
