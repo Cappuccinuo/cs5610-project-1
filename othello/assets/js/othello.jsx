@@ -174,7 +174,7 @@ class Othello extends React.Component {
             </section>
           </section>
           <aside id="info_container">
-            <Info />
+            <Info status={this}/>
           </aside>
         </div>
         <NotificationContainer />
