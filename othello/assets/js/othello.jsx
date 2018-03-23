@@ -153,7 +153,7 @@ class Othello extends React.Component {
           <section id="main_section">
             <header id="game_header">
               <h1>
-                Othello: {name}
+                Hi {window.userToken}, Othello: {name}
               </h1>
             </header>
             <section id="boards_container">

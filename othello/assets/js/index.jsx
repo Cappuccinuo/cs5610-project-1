@@ -25,6 +25,7 @@ class Index extends React.Component {
   render() {
     let link = '/';
     let gameNum = window.gameNum;
+    let currentUser = window.userToken;
     if(this.state.name) {
       link = '/game/'+this.state.name;
     }
@@ -33,7 +34,7 @@ class Index extends React.Component {
       <div id="home_index" className="view-container">
         <header>
           <Logo />
-          <h1 className="title">Welcome to <a className="othello" target="_blank" href="https://en.wikipedia.org/wiki/Reversi">Othello</a></h1>
+          <h1 className="title">{currentUser}, Welcome to <a className="othello" target="_blank" href="https://en.wikipedia.org/wiki/Reversi">Othello</a></h1>
         </header>
 
         <button className="button_base electric" onClick={function(e) {

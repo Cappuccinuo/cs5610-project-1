@@ -1,6 +1,6 @@
 <script>
   window.gameName = "<%= @game %>";
-  window.userToken = "<%= @current_user %>";
+  window.userToken = "<%= @current_user %>" == "" ? "Anonymous" : "<%= @current_user %>";
 </script>
 
 <div id="game">

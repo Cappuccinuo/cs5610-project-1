@@ -1,9 +1,26 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
   window.gameNum = "<%= @game_num %>";
+  window.userToken = "<%= @current_user %>" == "" ? "Hey you" : "<%= @current_user %>";
 </script>
 
+<link href='http://fonts.googleapis.com/css?family=Merienda+One' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+
 <div id="home">
+  <div class="login">
+    <%= if @current_user do %>
+      <p>
+        Logged in as: <%= @current_user %> |
+        <%= link "Log Out", to: "/session", method: :delete %>
+      </p>
+    <% else %>
+      <p>
+        Not logged in: 
+        <%= link "Log in", to: "/login" %>
+      </p>
+    <% end %>
+  </div>
   <div id="index">
     Loading...
   </div>

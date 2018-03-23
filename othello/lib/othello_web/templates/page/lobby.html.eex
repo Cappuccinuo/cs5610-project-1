@@ -1,4 +1,14 @@
 <div class="lobby container-login100" style="background-image: url('/images/bg-01.jpg');">
+  <div class="login">
+    <%= if @current_user do %>
+      <p>
+        Logged in as: <%= @current_user %> |
+        <%= link "Log Out", to: "/session", method: :delete %>
+      </p>
+    <% else %>
+      <%= link "Log in", to: "/login" %>
+    <% end %>
+  </div>
   <div class="table100 ver3 m-b-110">
 		<div class="table100-head">
 			<table>
