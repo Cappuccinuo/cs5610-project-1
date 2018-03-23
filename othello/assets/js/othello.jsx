@@ -133,14 +133,14 @@ class Othello extends React.Component {
       var lineX = (<Line
                     key={j}
                     points={[j*50, 0, j*50, 400]}
-                    stroke={'white'}
+                    stroke={'rgb(249, 208, 144)'}
                     stokeWidth={1}
                     closed={true}
                   />);
       var lineY = (<Line
                     key={j+7}
                     points={[0, j*50, 400,j*50]}
-                    stroke={'white'}
+                    stroke={'rgb(249, 208, 144)'}
                     stokeWidth={1}
                     closed={true}
                   />);
