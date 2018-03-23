@@ -40,10 +40,14 @@ defmodule Othello.Game do
         else
           # speculator
           if String.length(user_name) > 0 do
-            curr_game = %{curr_game | speculators: curr_game.speculators ++ [user_name]} 
-            new_games = %{games | curr_name => curr_game}
-            :ok = Agent.update(:games, fn last -> new_games end)
-            %{"state" => curr_game, "msg" => user_name <> " is watching.", "type" => "info"}
+            if Enum.member? curr_game.speculators, user_name do
+              %{"state" => curr_game, "msg" => user_name <> " is watching.", "type" => "info"}
+            else
+              curr_game = %{curr_game | speculators: curr_game.speculators ++ [user_name]} 
+              new_games = %{games | curr_name => curr_game}
+              :ok = Agent.update(:games, fn last -> new_games end)
+              %{"state" => curr_game, "msg" => user_name <> " is watching.", "type" => "info"}
+            end
           else
             %{"state" => curr_game, "msg" => "Anonymous is watching.", "type" => "info"}
           end 
