@@ -1,4 +1,3 @@
-<%= if Kernel.length(Map.keys(@games)) != 0 do %>
 <div class="lobby container-login100" style="background-image: url('/images/bg-01.jpg');">
   <div class="table100 ver3 m-b-110">
 		<div class="table100-head">
@@ -40,4 +39,3 @@
 		</div>
 	</div>
 </div>
-<% end %>

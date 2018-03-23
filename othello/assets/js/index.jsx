@@ -1,6 +1,7 @@
 import React                                                          from 'react';
 import ReactDOM                                                       from 'react-dom';
 import Logo                                                           from './components/logo.js';
+import swal                                                           from 'sweetalert';
 
 export default function run_index(root) {
   ReactDOM.render(<Index />, root);
@@ -23,6 +24,7 @@ class Index extends React.Component {
 
   render() {
     let link = '/';
+    let gameNum = window.gameNum;
     if(this.state.name) {
       link = '/game/'+this.state.name;
     }
@@ -53,14 +55,20 @@ class Index extends React.Component {
 
           <div className="input">
             <input onKeyUp={this.handleChange} placeholder={'Enter room name'}/>
-            <button id="enter" type="submit" color='success'>Join</button>
+            <button id="enter" type="submit" color='success'>Join/Create</button>
           </div>
         </form>
 
         <div>
           <button className="button_base electric" onClick={function(e) {
               e.preventDefault();
-              window.location = "/lobby";
+              if (gameNum == 1) {
+                swal("Oops!", "Currently no game, start a new game now!", "warning");
+                $('.gameinput div').addClass('active');
+              }
+              else {
+                window.location = "/lobby";
+              }
             }}>
             <span>Game Lobby</span>
           </button>

@@ -1,4 +1,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+  window.gameNum = "<%= @game_num %>";
+</script>
 
 <div id="home">
   <div id="index">

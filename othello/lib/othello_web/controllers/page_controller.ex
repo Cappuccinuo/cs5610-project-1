@@ -4,7 +4,8 @@ defmodule OthelloWeb.PageController do
 
   def index(conn, _params) do
     games = Game.get_all_games
-    render conn, "index.html", games: games
+    game_num = Kernel.length(Map.keys(games))
+    render conn, "index.html", games: games, game_num: game_num
   end
 
   def lobby(conn, _params) do
