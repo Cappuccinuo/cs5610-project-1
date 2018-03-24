@@ -17,7 +17,7 @@ class Index extends React.Component {
   }
 
   handleChange(e) {
-    
+
     this.setState({
       name: e.target.value,
     });
@@ -25,7 +25,6 @@ class Index extends React.Component {
 
   render() {
     let link = '/';
-    let gameNum = window.gameNum;
     let currentUser = window.userToken;
     if(this.state.name) {
       link = '/game/'+this.state.name;
@@ -62,15 +61,9 @@ class Index extends React.Component {
         </form>
 
         <div>
-          <button className="button_base electric" onClick={function(e) {
+          <button id="lobbybutton" className="button_base electric" onClick={function(e) {
               e.preventDefault();
-              if (gameNum == 0) {
-                swal("Oops!", "Currently no game, start a new game now!", "warning");
-                $('.gameinput div').addClass('active');
-              }
-              else {
-                window.location = "/lobby";
-              }
+              window.location = "/lobby";
             }}>
             <span>Game Lobby</span>
           </button>

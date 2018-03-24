@@ -1,6 +1,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
-  window.gameNum = "<%= @game_num %>";
   window.userToken = "<%= @current_user %>" == "" ? "Hey you" : "<%= @current_user %>";
 </script>
 
@@ -16,7 +15,7 @@
       </p>
     <% else %>
       <p>
-        Not logged in: 
+        Not logged in:
         <%= link "Log in", to: "/login" %>
       </p>
     <% end %>

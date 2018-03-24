@@ -6,8 +6,15 @@ h1, h2 {
   text-align: center;
 }
 
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
 #home {
   margin: 0;
+  height: 100vh;
   background: #F1F4F3;
   font-family: Georgia,Times,Times New Roman,serif;
 }
@@ -41,7 +48,7 @@ h1, h2 {
   height: 100%;
   top: 0;
   left: 0;
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255,255,255,0.5);
 }
 
 .button_base {
@@ -143,8 +150,8 @@ div {
 }
 
 #boards_container {
-    padding-top: 100px;
-    padding-left: 30%;
+    padding-top: 170px;
+    padding-left: 35%;
 }
 
 #game_show {
@@ -266,15 +273,15 @@ div {
   margin-top: 10px;
 }
 a:link {
-    color: black;
+    color: #424242;
     text-decoration: none;
 }
 a:visited {
-    color: black;
+    color: gray;
     text-decoration: none;
 }
 a:hover {
-    color: gray;
+    color: #3B4859;
     text-decoration: none;
 }
 a:active {
@@ -303,9 +310,7 @@ a:active {
 }
 
 // Info session
-.userinfo {
-  margin-top: 20%;
-}
+
 
 // Login part
 .login {
@@ -318,4 +323,44 @@ a:active {
   font: 400 15px/1.2 'Merienda One', Helvetica, sans-serif;
   color: rgba(0,0,0,0.7);
   text-shadow: 3px 3px 3px #fff;
+}
+
+.score {
+  padding-left: 120px;
+  padding-top: 120px;
+}
+
+.score p {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  line-height: 64px;
+  margin: 0 0 0;
+  text-align: left;
+  font-size: 30px;
+  color: black;
+}
+
+.score span {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  line-height: 64px;
+  margin: 0 0 0;
+  text-align: left;
+  font-size: 24px;
+  color: black;
+}
+
+.whitenum {
+  vertical-align: middle;
+  margin-bottom: 0.75em;
+}
+
+.blacknum {
+  vertical-align: middle;
+  margin-bottom: 0.75em;
+}
+
+.score i {
+  padding-right: 10px;
+  padding-left: 10px;
 }

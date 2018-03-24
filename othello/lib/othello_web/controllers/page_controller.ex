@@ -4,13 +4,19 @@ defmodule OthelloWeb.PageController do
 
   def index(conn, _params) do
     games = Game.get_all_games
-    game_num = Kernel.length(Map.keys(games))
-    render conn, "index.html", games: games, game_num: game_num
+    render conn, "index.html", games: games
   end
 
   def lobby(conn, _params) do
     games = Game.get_all_games
-    render conn, "lobby.html", games: games
+    game_num = Kernel.length(Map.keys(games))
+    if game_num == 0 do
+      conn
+      |> put_flash(:error, "Empty lobby now.")
+      |> redirect(to: page_path(conn, :index))
+    else
+      render conn, "lobby.html", games: games, game_num: game_num
+    end
   end
 
   def game(conn, params) do

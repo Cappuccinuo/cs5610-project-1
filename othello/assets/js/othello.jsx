@@ -47,7 +47,7 @@ class Othello extends React.Component {
         swal("", resp.msg, resp["type"]);
       }else{
         NotificationManager.info(resp.msg, '');
-      }      
+      }
     });
 
     channel.on("table:close", resp => {
@@ -84,7 +84,6 @@ class Othello extends React.Component {
     images['black'].src = black;
     images['white'].src = white;
     images['board'].src = board;
-
   }
 
   updateView(resp) {
@@ -98,11 +97,11 @@ class Othello extends React.Component {
       }
       else if(resp.state.players[~resp.state.winner+2] == window.userToken) {
         // only show lose info to loser
-        swal("Game over!", resp.state.players[~resp.state.winner + 2]+", keep fighting!", "warning"); 
+        swal("Game over!", resp.state.players[~resp.state.winner + 2]+", keep fighting!", "warning");
       }
       else {
         // show win to winner and speculators
-        swal("Game over!", resp.state.players[resp.state.winner]+", you wins!", "success");     
+        swal("Game over!", resp.state.players[resp.state.winner]+", you wins!", "success");
       }
       this.props.channel.push("restart", {})
           .reveive("ok", resp => {});
@@ -150,6 +149,7 @@ class Othello extends React.Component {
   render() {
     // TODO
     let i = 0;
+    let currentState = this.state;
     const discs = this.state.colors.map(color => {
                                           return (<Disc
                                                     key={i}
@@ -165,7 +165,25 @@ class Othello extends React.Component {
     const parser = new DOMParser;
     let name = parser.parseFromString('<!doctype html><body>'+encoded, 'text/html').body.textContent;
 
+    let playerA = currentState.players[0];
+    let playerB = currentState.players[1];
+
+    let turn = currentState.turn;
+    let currentPlayer = currentState.players[turn];
+
     let player = window.userToken;
+    let playerInfo = currentState.players.length == 2 ? playerA + " vs " + playerB : "Hi " + player;
+
+    let turnInfo = currentState.players.length == 2 ? currentPlayer + "'s turn" : "Wait matching.";
+
+    let white = 0, black = 0;
+    for(var j = 0; j < currentState.colors.length; j++) {
+      if(currentState.colors[j] == 1) {
+        black++;
+      } else if(currentState.colors[j] == 2) {
+        white++;
+      }
+    }
 
     let lines = [];
 
@@ -193,7 +211,7 @@ class Othello extends React.Component {
           <section id="main_section">
             <header id="game_header">
               <h1>
-                Hi {player}, Othello: {name}
+                {playerInfo}, Othello: {name}
               </h1>
             </header>
             <section id="boards_container">
@@ -211,6 +229,17 @@ class Othello extends React.Component {
                   {discs}
                 </Layer>
               </Stage>
+              <div className="score">
+                <p>{turnInfo}</p>
+                <div>
+                  <img className="whitenum" src="/images/white.png"></img>
+                  <span><i class="fas fa-times"></i>{white}</span>
+                </div>
+                <div>
+                  <img className="blacknum" src="/images/black.png"></img>
+                  <span><i class="fas fa-times"></i>{black}</span>
+                </div>
+              </div>
             </section>
           </section>
           <aside id="info_container">

@@ -12,15 +12,15 @@
   </head>
 
   <body>
-    <div class="container">
+    <div className="app">
       <% if get_flash(@conn, :info) do %>
         <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <% end %>
       <% if get_flash(@conn, :error) do %>
         <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <% end %>
-    </div> <!-- /container -->
-    <%= render @view_module, @view_template, assigns %>
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+      <%= render @view_module, @view_template, assigns %>
+      <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    </div>
   </body>
 </html>
