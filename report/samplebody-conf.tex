@@ -1,330 +1,274 @@
-\section{Introduction}
-The reason why we choose capture the flag as our final project
-is that, the game itself is fun and there are plenty of strategies
-to win. In the following part, we'll briefly introduce the rule.
+\section{Introduction and Game Description}
+\subsection{Game Introduction}
+\subsubsection{Game rules}
+Othello, also called Reversi, is a strategy board game for two players, played 
+on an 8*8 uncheckered board. There are sixty-four identical game pieces called 
+disks (Black and White). Players take turns placing disks on the board with 
+their assigned color facing up. During a play, any disks of the opponent's color 
+that are in a straight line and bounded by the disk just placed and another disk 
+of the current player's color are turned over to the current player's color.
 
-The map is divided into 2 halves: red(left) and blue(right). 
-Each team with two agents must defend their own color territory while trying to eat food on the other side.
-Red agents must defend food on red side and try to 
-eat food on the blue side.  When on the red side, red agents are ghosts. When on the blue side,
-red agents are Pacmans.
+\subsubsection{Game object}
+The object of the game is to have the majority of disks turned to display your 
+color when the last playable empty square is filled.
 
-When a Pacman eats a food, the food is stored up inside the Pacman and removed
-from the board.  When it returns to its own side, it deposits the food, earning 
-1 point per food delivered.  If the Pacman is eaten before returning to its own side by a ghost, it loses all the food 
-it is carrying and re-spawn to the start point as a ghost.  All the food become 
-a cloud of food on the board.  No point rewards for eating Pacmans. 
+\subsection{Design Introduction}
 
-Agent can only observe enemy 
-agents’ position and direction if they are within 5 Manhattan distance from our agent. 
-Otherwise, we will always get noisy distance reading. And this game is limited to 1200 
-moves(300 moves for each agent), and the computation 
-time for each agent is 1 second. 
+\subsubsection{Join/Create/Speculate a game} There are two ways for a logged-in 
+user to join an existing game. He can either 
+click the join game button on the index page and type in the existing game name
+if he/she knows, or he can enter the game lobby by clicking the 
+game lobby button. There are two kinds of game, one is games already started, 
+which other users can speculate, the other is games still wait for matching, 
+which other users can join to play against others. 
 
-The algorithm we are using is minimax algorithm with alpha-beta pruning. 
-To deal with the noise in distance reading, we implemented particle filter, 
-which is an established method for approximate inference of Hidden Markov Model. 
-When test against two test agents baselineTeam and GoTeam, our agent won 19 games out of 20. 
+\subsubsection{Speculators and Players authority} We allow anonymous user
+(who don't log in) to speculate the game that has started but that user will not
+be shown in speaculator list in game page. But one user is only 
+be allowed to join or create the game when he/she is logged in. 
 
+\subsubsection{Priority for current players}
+When a player creates a new room, the game board is locked, he must wait for an
+opponent to join to start the game. After second player enters the room, the board
+will be unlocked, first person enter the room will move first. After the game 
+start, other users can speculate the game. When one of the players leaves the 
+room, the room will still exist, while when both players left the room, the 
+room will be deleted and all the speculators will receive an alert and be 
+redirected to index page . That's why we call the design choice priority for 
+players, as they are the key roles of the game.
 
-\section{Approach}
-Each team can control two agents. On our territory, they are in form of ghost (defensive agent), 
-while on opponent's territory, they are in form of pacman (offensive agent). 
-We have designed different strategies for the two types of agent.
-
-\subsection{Development of offensive agent}
-The goal of the offensive agent (pacman) is to return enemy's food safely. 
-When making a choice for the next action, the offensive agent uses miniMax 
-algorithm to choose actions that maximize the score. The score is calculated 
-by evaluating a given game state with various heuristics. We have developed 
-following strategies (heuristics) to guide the agent.
-
-\subsubsection{Avoid enemy ghosts}
-Although the first priority of our pacman is to return enemy's food, we want 
-to do it in a safe way. Our pacman will try to avoid enemy ghosts by keeping 
-distance to the nearest enemy. When enemy ghost is very close (maze distance <= 5) 
-to our pacman, we choose to rush back to our side to dump the food we are carrying.
-
-\subsubsection{Don't be too greedy}
-If our pacman was caught by enemy ghosts, we will lose all food carried by 
-that pacman. Thus we want our pacman to regularly return food to base and 
-come back to eat more food. Currently we set a carrying-limit which equals 
-to 6 at the beginning of the game, and this number decreases according to 
-how much time is left in the game.
-
-\subsubsection{Avoid obvious dead end}
-There are many dead ends on the map. Our pacman should be able to 'see' an 
-obvious dead end and avoid that, because run into a dead end will waste a 
-step and increase the chance of being caught by the enemy. To help the pacman 
-avoid dead end,  we scan the board at the very beginning of the game. For each 
-legal position (not wall), we calculate its degree (how many directions can 
-move when standing on that position) and store the result in a dictionary 
-for later reference. When making a choice for the next move, our pacman should 
-select a next position with a higher degree.
-
-
-\begin{table}[!htb]
-  \caption{Heuristics of offensive agent}
-  \label{1}
-  \begin{tabular}{ccl}
-    \toprule
-    Feature&Weight\\
-    \midrule
-    Board score & 1000\\
-    Remaining food & -100\\
-    Distance to closest food & -5\\
-    Distance to enemy ghost & 20\\
-    Distance to unseen ghost & 1\\
-    Distance to scared ghost & -2\\
-    Freedom to move & 1\\
-  \bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Development of defensive agent}
-The goal of the defensive agent (ghost) is to defend our food. When making 
-a choice for the next action, the defensive agent simply select an action 
-from all legal actions that maximize the score. The score is calculated by 
-evaluating a given gameState with various heuristics. We have developed 
-following strategies (heuristics) to guide the agent.
-
-\subsubsection{Chase enemy pacman}
-Our ghost will keep monitoring invaders and try to send them back. For 
-enemies that are insight, their exact location and direction are known, 
-and our ghost will move towards the enemy to shorten the distance between 
-them. For enemies that are unseen (only know a noise distance), we use 
-particle filters to estimate their current location and move towards them.
-
-\subsubsection{Follow potential enemies}
-Our ghost should be able to follow potential enemies's move, and stop them 
-from invading. To this end, we use particle filters to estimate enemy agents' 
-location and make our ghost move according to the enemy's position.
-
-\subsubsection{Stay close to frontline}
-If there are no invaders, our ghost should stay close to frontline and patrol. 
-This is more efficient than staying at rear.
-
-\begin{table}[!htb]
-  \caption{Heuristics of defensive agent}
-  \label{2}
-  \begin{tabular}{ccl}
-    \toprule
-    Feature&Weight\\
-    \midrule
-    Number of invaders insight & -1000\\
-    Number of unseen invaders & -500\\
-    Distance to invaders insight & -10\\
-    Distance to unseen invaders & -5\\
-    Distance to potential enemies & -2\\
-    On Defense & 100\\
-    Distance to frontline & 1\\
-  \bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Strategy of test agent GoTeam}
-As our final team is one defensive agent and one offensive agent, we
-implemented two offensive reflex, feature-based agents to test. 
-
-To make the two agent collaborate, we divide the food on the map into two parts.
-Each agent would approach the closest food in their own foodList.  Once they had consumed 
-all the food in their foodList, they would return the food back to home and went after the 
-food left on the map. 
-
-To avoid the enemy ghost, we made the agent to retreat to middle line regardless of whether it
-has eaten up its foodList to secure the food they have eaten.  Eat capsule first if it is close 
-to the capsule or its teammate is close to the capsule.  This is also a way to collaborate.
-
-Our test agent GoTeam is adventurous as to the distance to the opponent.  Although we can see 
-the actual distance within 5 steps, we only make moves when the opponent is one step away from
-us.  The advantage of it is the fact that we can eat as much food as possible. The disadvantage is somehow 
-obvious, sometimes the agent will run into a dead end and caught by the enemies.
-
-To determine the weight given to each of the above goals, we used the human thinking way.
-Cause it is easy to rank the offensive agent's priority: 1. avoid ghost enemies, 2. eat
-adjacent scared ghosts, 3. eat closest food. We set different feature and weight to reflect 
-these priorities, as shown in Table 1.
-
-\begin{table}[!htb]
-  \caption{Heuristics of GoTeam agent}
-  \label{3}
-  \begin{tabular}{ccl}
-    \toprule
-    Feature&Weight\\
-    \midrule
-    successorScore & 100\\
-    eatInvader & 5\\
-    invaderOneStep & 1\\
-    distanceToFood & -1\\
-    distanceToShelter & 10\\
-    eatCapsule & 10\\
-    dangerousGhostOneStep & -20\\
-    eatScaredGhostFirst & 1\\
-    safeGhostOneStep & 0.1\\
-    stopped & -10 \\
-    eatFoodFirst & 1\\
-  \bottomrule
-\end{tabular}
-\end{table}
-
-
-\subsection{Locate unseen enemies}
-One challenge in this game is that when enemy agents are far away (manhattan distance > 5), 
-their exact positions are unknown. What we only know is a distance reading with noise up to .  
-This is a classic hidden Markov Model (HMM), where we cannot make direct observations of the 
-current state. To locate unseen enemies, we applied particle filters for approximate inference 
-of the HMM \cite{CS188} \cite{Thrun02d} \cite{Wikipedia}. Briefly, we use a particle to represent 
-a possible state (a legal location on the board). 
-At time elapse step, we update the particle distribution according to enemy's moves. 
-We expect the enemy agents will move towards our food, thus the moves that shorten the 
-distance between enemy agent and our food will have a higher probability (we use 0.9). 
-At observation step, we update the particle distribution according to current observation 
-and normalize the probabilities. When the enemy agent is insight, we know its exact position. 
-Otherwise we use the expected location which has the highest probability. Using this method, 
-we were able to estimate enemy positions with high precision. This is critical to improve the 
-efficiency of our defensive agent. In Figure 1, the depth of red color represents the approximate
-locations of enemies. We can see that particle filter can almost locate every unseen enemies. 
-
+\section{UI Design}
+There are four main pages in our game.
+\subsection{Index Page}
+Index page contains the entry to log in, create game and enter game lobby.
+\begin{itemize}
+\item When click log in, the app will redirect user to log-in page.
+\item When click join game button, user can create a new game or join an 
+existing game by entering the game name. When hit enter, the app will redirect
+user to game page.
+\item When click game lobby button, the app will redirect user to lobby page.
+\end{itemize}
 \begin{figure}[!htb]
-\includegraphics[height=1.7in, width=3.3in]{Picture.png}
-\caption{Defensive agent with \texttt{Particle Filter}}
+\includegraphics[height=2.0in, width=3.3in]{index.png}
+\caption{\texttt{Index Page}}
+\end{figure}
+\begin{figure}[!htb]
+\includegraphics[height=2.0in, width=3.3in]{index2.png}
+\caption{\texttt{Join Game Button}}
 \end{figure}
 
+\subsection{Log in Page}
+Log in part is very basic. User can just enter the name without password to 
+log in.
+\begin{figure}[!htb]
+\includegraphics[height=2.0in, width=3.3in]{login.png}
+\caption{\texttt{Log in Page}}
+\end{figure}
 
-\section{Results and Testing}
-We did the test for our test agent GoTeam, and our final agent PacmanGo with/without particle filter
-on default map.  Following are the results after running 20 games against each opponent team. 
+\subsection{Lobby Page}
+The information shown on the lobby page including game name, game status(user
+is waiting for a match/the players currently playing), number of speculators,
+and a column indicates choice of joining or speculating one game. Notice that 
+when the lobby is empty, the user receive empty lobby alert instead of being
+directed to empty lobby.
+\begin{figure}[!htb]
+\includegraphics[height=2.0in, width=3.3in]{lobby.png}
+\caption{\texttt{Empty Lobby}}
+\end{figure}
+\begin{figure}[!htb]
+\includegraphics[height=2.0in, width=3.3in]{lobby2.png}
+\caption{\texttt{Lobby Page}}
+\end{figure}
 
-\begin{table}[!htb]
-  \caption{PacmanGo vs BaselineTeam result after 20 games}
-  \label{4}
-  \begin{tabular}{c|ccc}
-    \toprule
-    vs BaselineTeam & Win & Tie & Lose \\
-    \midrule
-    PacmanGo without Particle Filter & 85\% & 5\% & 10\%\\
-    PacmanGo with Particle Filter & 95\% & 5\% & 0\%\\
-    
-  \bottomrule
-\end{tabular}
-\end{table}
+\subsection{Game Page}
+In the game page, there are three main sections.
+\begin{itemize}
+  \item Header shows the game info, including game name, and game status(waiting
+  for a match or players name who are currently playing).
+  \item Side bar shows all the speculators' names and has one exit button for 
+  a player to exit a game.
+  \item Game board uses react-konva component. The disc uses Circle, the board 
+  uses Rect, and board line uses Line. On right side of board shows the ownership
+  of current move, and number of white and black discs.
 
-\begin{table}[!htb]
-  \caption{PacmanGo vs GoTeam result after 20 games}
-  \label{5}
-  \begin{tabular}{c|ccc}
-    \toprule
-    vs GoTeam & Win & Tie & Lose \\
-    \midrule
-    PacmanGo without Particle Filter & 70\% & 5\% & 25\%\\
-    PacmanGo with Particle Filter & 95\% & 0\% & 5\%\\
-    
-  \bottomrule
-\end{tabular}
-\end{table}
+\end{itemize}
+\begin{figure}[!htb]
+\includegraphics[height=2.0in, width=3.3in]{game.png}
+\caption{\texttt{Game Page}}
+\end{figure}
+\section{UI to Server Protocal}
+In this project, there are two types of connection from UI to Server. For page 
+rendering and user login, the connection is supported by Phoenix controllers 
+invoked from the router in response to HTTP requests (as used in Tasktracker 
+homework). For game joining, game state update and broadcasting, the connection 
+is supported by websocket implemented by Phoenix channel, which provides a 
+bidirectional communication from UI to server.
 
-From the test results we can see that the winning rate against GoTeam and BaselineTeam
-improved after implementing the particle filter.
+\subsection{HTTP request and Controllers}
+The paths under router.ex are shown as following:
 
-Then we used our final agent(with Particle Filter) against other teams.  Following are the results.
+\begin{lstlisting}
+get "/", PageController, :index
+get "/login", PageController, :login
+get "/lobby", PageController, :lobby
+get "/game/:game", PageController, :game
 
-\begin{table}[!htb]
-  \caption{PacmanGo vs Other teams result after 20 games}
-  \label{6}
-  \begin{tabular}{c|ccc}
-    \toprule
-    PacmanGo vs & Win & Tie & Lose \\
-    \midrule
-    Team1 & 0\% & 35\% & 65\%\\
-    Team3 & 55\% & 10\% & 35\%\\
-    Team4 & 0\% & 60\% & 40\%\\
-    Team5 & 55\% & 0\% & 45\%\\
-    
-  \bottomrule
-\end{tabular}
-\end{table}
+post "/session", SessionController, :create
+delete "/session", SessionController, :delete
+\end{lstlisting}
 
-We have assessed the replay and observed several problems. 
-One of them is deadlock between our offensive agent and opponent’s 
-defensive agent(or our defensive agent and opponent’s offensive agent). 
-These agents move back and forth near the border line, because the 
-enemy ghost is in the way to the nearest food that our offensive 
-agent wants to eat. This usually results in a tie game. 
+PageController handles all page requests, and SessionController only handles 
+login/logout operations. PageController is invoked as corresponding function 
+calls by Router, and corresponding templates are rendered. 
 
-Similarly, we utilized GoTeam to compete against other teams.
+SessionController is invoked in login template and uses put\_session to assign 
+username to window session. In router.ex, we also added a plug :get\_current\_user, 
+by which the username can be retrieved from session in any template. Based on 
+this, we can use <script> in game template to assign session username to window, 
+by which a socket can obtain session username for later use in channel.
 
-\begin{table}[!htb]
-  \caption{GoTeam vs Other teams result after 20 games}
-  \label{7}
-  \begin{tabular}{c|ccc}
-    \toprule
-    GoTeam vs & Win & Tie & Lose \\
-    \midrule
-    Team1 & 30\% & 30\% & 40\%\\
-    Team3 & 90\% & 0\% & 10\%\\
-    Team4 & 70\% & 0\% & 30\%\\
-    Team5 & 15\% & 0\% & 85\%\\
-    
-  \bottomrule
-\end{tabular}
-\end{table}
 
-From the results, we noticed that the winning rate increases dramatically against Team 1, 
-Team 3 and Team 4 comparing with PacmanGo's result. That's because GoTeam has better 
-offense collaboration than PacmanGo. 
+\subsection{Websocket and Channel}
+In user\_socket.ex, we defined channel as "gamechannel:*", where the "*" stands 
+for specific name of game table. Therefore a instance of channel stands for a 
+specific game table. 
 
-A common issue with PacmanGo and GoTeam is
-fixed roles of agents. As a result, situations like these may occur in PacmanGo, after 
-the offensive agent re-spawn at the start point and invaders observed in our side, the 
-offensive agent will not assist the defensive agent so the enemy got away with food. 
-Similarly, when there is no invaders, the defensive agent just stay and not attack, which
-is conservative. On the contrary, GoTeam is way more adventurous, but it lacks defense 
-action, once it is caught by enemy and re-spawn at home it will not defend only if the 
-enemy is very close.
+ When a user joins a game (no matter as a player or a speculator), the user just 
+ provides the channel name that stands for the name of game table, as well as 
+ the socket that contains username originally from session. The join function 
+ in game\_channel.ex will invoke module in game.ex to handle the real joining 
+ logic, e.g. whether the game exists or needs to be created in Agent, or 
+ whether the user joined as a player or speculator...
 
-\section{Discussion}
-There are still a lot of place that can be strengthened in our work.
+ We will cover in more details about the data structure on server in later part 
+ of the report, but to illustrate the payload structure, we just put our 
+ server-side data structure here:
 
-To begin with, we considered the factor that the time and steps are limit, and fixed- 
-role-agent cannot deal with all situations in a dynamic world， so our 
-agent should change roles dynamically.  We could make agent switch between
-different strategies, like Attack, Defense, Run, Chase, and let the agent
-switch role between offense and defense based on how far the game has
-progressed. Besides, when there is a deadlock, we could have made the agent 
-switch plan or path. At last, our minimax depth is 1 so far. When the depth 
-is 2, the execution time is too long. To solve the problem we may run the 
-minimax in a simulate gameState to improve the depth to 2 or 3.
+ \begin{lstlisting}
+ %{ 
+  colors: [],          # a list of numbers of length 64
+  turn: 0,             # a number to indicate who's turn, the 
+                         number is the index in players
+  players: [],         # a list of string that stands for 
+                         players
+  winner: nil,         # a number that stands for the winner, 
+                         nil if no winner
+  speculators: [],     # a list of string that stands for 
+                         speculators
+  online_players: 2    # number of players remained online in 
+                         this table
+  }
+  \end{lstlisting}
 
-As to our test agent GoTeam, in some situations, it received better result than our final
-agent because of its collaborative offense.  It can be improved also by changing 
-strategy based on gameState, like when the board score is enough to win it can return
-home to defend the territory, using the strategy of our final agent.
+  The above data structure stands for a state of game in a game table, 
+  which has uniform structure through UI to Server, and we will call it "state" 
+  or "game state" in later parts for simplicity. After a join function is called, 
+  it wraps and returns a response through socket in a structure like this: 
+\begin{lstlisting}
+%{"state" => state, "msg" => "message to be displayed", "type" => "optional type"}
+\end{lstlisting}
 
-\begin{acks}
-  We gratefully acknowledge John DeNero and Dan Klein in UC Berkeley 
-  for developing the contest baseline code. 
+where state is the current game state, which has a structure we discussed above. 
+The "msg" stands for the message to be displayed at front-end to notify a new 
+user/speculator has joined/left. "type" stands for what kind of notification or 
+dialog(success, warning or error) should be displayed.
 
-  This work was performed by Chang, Weihan, and Yuan.
+Apart from a direct return, the join function also triggers handle\_info
+({:after\_join, resp}, socket) to be invoked after joining, where resp is 
+identical with the reponse passed to socket. In this handle\_info function, 
+we broadcast resp to every socket that subsribed to this channel 
+(this game table). In this way, every player and speculator will be notified 
+that a new player or new speculator has joined this room/table, or a player 
+comes back to this room/table. This broadcast has a label "new:user", and the 
+callback in front-end's channel.on("new:user") will be called to determine 
+how the notification will be executed according to the resp["msg"] and \\
+resp["type"].
 
-  Chang found the idea of the project. He implemented Minimax 
-  and Particle Filter in our final agent. He
-  wrote the approach of our final agent part. 
-  Weihan arranged the code, meeting note, implemented agent test and 
-  designed the heuristics of final agent. 
-  He wrote the introduction, test and result part in this paper.
-  Yuan implemented test agent GoTeam, organize the team meetings and 
-  took charge of the presentation PPT. He wrote the rest part of the 
-  paper and combine the paper using latex.
+When a player clicks a position on game board, the UI pushes "move" through 
+the socket to server by channel.push("move", {index: index}), where index is 
+the index in the 1-D array of colors calculated by x and y coordinates. 
+Therefore, the index in 1-D array is the only variable passed to server 
+in order to make a move. In game\_channel.ex, handle\_in("move", \%{"index" => i}, 
+socket) will be invoked and passed i to Game.simulate\_next\_state(curr\_name, i) 
+in game.ex, curr\_name is the current table name that can be retrieved from socket.
+The Game.simulate\_next\_state/2 function returns a tuple {boolean, resp}, 
+where the boolean indicates whether this move is a valid move, and resp has a 
+structure like this:
+ \begin{lstlisting}
+%{"state" => state}
+ \end{lstlisting}
 
-  We want to express our gratitude to Prof.Stacy, what he taught in
-  class not only gives us inspiration, but also is very useful in our 
-  future study and work. Also, we would like to thank our TA Dan and Navya,
-  who have been assisting us in solving problems during the course.  And special
-  thanks to Pedro, Nutchanon, Dan, Sophie for giving us wonderful lectures.
+where state is the current game state. If current move is a valid move, 
+resp will be broadcasted to every socket subscribed, and {:ok, resp} will 
+be returned. If move is invalid, resp will not be broadcasted, and {:error, 
+resp} will be returned. In client-side, if channel detects "error" in call-back, 
+the player will be notified that the current move is invalid.
 
-\end{acks}
+When any user leaves the game table (close browser, log out or go to another 
+page), terminate(reason, socket) will be called. The terminate/2 determines 
+whether the game table should persist and what kind of message should be 
+broadcasted, the broadcasted payload has a structure like this:
+
+ \begin{lstlisting}
+ %{"msg" => msg, "type" => type}
+\end{lstlisting}
+
+
+\section{Data structures on server}
+As discussed before, the game state on server has a structure like this:
+\begin{lstlisting}
+%{ 
+  colors: [],        # a list of numbers of length 64
+  turn: 0 or 1,      # a number to indicate who's turn, the 
+                       number is the index in players
+  players: [],       # a list of string that stands for 
+                       players
+  winner: nil,       # a number that stands for the winner, 
+                       nil if no winner
+  speculators: [],   # a list of string that stands for 
+                       speculators
+  online_players: 2  # number of players remained online in 
+                       this table
+  }
+\end{lstlisting}
+More specifically, each element in the color list stands for the occupation or 
+color on this position, 0 represents unoccupied, 1 represents black disc, and 
+2 represents white disc. The list of players and list of speculators are both 
+lists of usernames. The "turn" attribute is the index in players, the username 
+of owner of this turn is players[turn]. The "winner" attribute uses the similar 
+design, players[winner] is the username of the winner, but apart from 0 and 1, 
+"winner" attribute can also be 2, which stands for a tie situation when game 
+ends. The online\_players stands for the number of online players remained in 
+this table, when online\_players becomes 0, the game table will be closed and 
+deleted as introduced in our design part.
+
+Game states all persist on Agent in server. The Agent in our project has a 
+structure like this:
+\begin{lstlisting}
+%Agent{games: %{game_name: state}}
+\end{lstlisting}
+Under this design, Agent.get(:games, \&(\&1)) will get all game states in a form 
+of map, and this map can get a specific game state using the game\_name as key. 
+The reason why we chose not to directy use {game\_name => state} as key-value 
+pair under Agent is that, in order to implement game lobby, we want the whole 
+list of game states, and Agent.get(:games, \&(\&1)) can simply achieve this. The 
+trade-off is, this makes us need to get all game states before retrieving a 
+specific state, and each game state has O(n) complexity, where n is number of 
+users (players and speculators list), if there are m rooms, the space complexity 
+can be O(mn). However, as this is a course project, even if we have 1000 users 
+and 1000 rooms, the worst-case memory used is just O(1000,000), which can 
+actually use only MBs of memory, therefore making our design totally acceptable.
+
+\section{Implementation of game rules}
+\section{Challenges and Solutions}
+
+
+
 
 \begin{comment}
+
+\begin{acks}
+\end{acks}
 
 \subsection{Type Changes and {\itshape Special} Characters}
 
