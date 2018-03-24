@@ -1,0 +1,21 @@
+  We gratefully acknowledge John DeNero and Dan Klein in UC Berkeley
+  for developing the contest baseline code.
+
+  This work was performed by Chang, Weihan, and Yuan.
+
+  Chang found the idea of the project. He implemented Minimax
+  and Particle Filter in our final agent. He
+  wrote the approach of our final agent part.
+  Weihan arranged the code, meeting note, implemented agent test and
+  designed the heuristics of final agent.
+  He wrote the introduction, test and result part in this paper.
+  Yuan implemented test agent GoTeam, organize the team meetings and
+  took charge of the presentation PPT. He wrote the rest part of the
+  paper and combine the paper using latex.
+
+  We want to express our gratitude to Prof.Stacy, what he taught in
+  class not only gives us inspiration, but also is very useful in our
+  future study and work. Also, we would like to thank our TA Dan and Navya,
+  who have been assisting us in solving problems during the course.  And special
+  thanks to Pedro, Nutchanon, Dan, Sophie for giving us wonderful lectures.
+
