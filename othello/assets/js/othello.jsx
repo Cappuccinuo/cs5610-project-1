@@ -172,7 +172,7 @@ class Othello extends React.Component {
     let currentPlayer = currentState.players[turn];
 
     let player = window.userToken;
-    let playerInfo = currentState.players.length == 2 ? playerA + " vs " + playerB : "Hi " + player;
+    let playerInfo = currentState.players.length == 2 ? playerA + " vs " + playerB : player + " is waiting for a match";
 
     let turnInfo = currentState.players.length == 2 ? currentPlayer + "'s turn" : "Wait matching.";
 
@@ -211,8 +211,11 @@ class Othello extends React.Component {
           <section id="main_section">
             <header id="game_header">
               <h1>
-                {playerInfo}, Othello: {name}
+                Table: {name}
               </h1>
+              <h2>
+                Match: {playerInfo}
+              </h2>
             </header>
             <section id="boards_container">
               <Stage width={400} height={400}>

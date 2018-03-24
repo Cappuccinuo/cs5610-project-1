@@ -36,6 +36,9 @@ defmodule Othello.Game do
         # two players in room
         if Enum.member? curr_game.players, user_name do
           # already a player
+          curr_game = %{curr_game | online_players: 2}
+          new_games = %{games | curr_name => curr_game}
+          :ok = Agent.update(:games, fn last -> new_games end)
           %{"state" => curr_game, "msg" => user_name <> " is back.", "type" => "success"}
         else
           # speculator
