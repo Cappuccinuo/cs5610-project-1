@@ -13,6 +13,9 @@ class Index extends React.Component {
     this.state = {
       name: null,
     }
+    if(window.info) {
+      swal("", window.info, "warning");
+    }
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -28,10 +31,6 @@ class Index extends React.Component {
     let currentUser = window.userToken;
     if(this.state.name) {
       link = '/game/'+this.state.name;
-    }
-
-    if(window.info) {
-      swal("", window.info, "warning");
     }
 
     return (

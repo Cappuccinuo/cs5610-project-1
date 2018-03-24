@@ -6,7 +6,7 @@ defmodule OthelloWeb.PageController do
     if params["info"] do
       render conn, "index.html", info: params["info"]
     else
-      render conn, "index.html"
+      render conn, "index.html", info: nil
     end
   end
 
