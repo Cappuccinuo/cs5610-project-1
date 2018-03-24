@@ -30,7 +30,12 @@ function init() {
     run_index(index);
   }
   if(game) {
-    let channel = socket.channel("gamechannel:"+window.gameName, {});
+    // parsing method attribution goes to answer by Jeremy Banks:
+    // https://stackoverflow.com/questions/3700326/decode-amp-back-to-in-javascript?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+    const encoded = window.gameName;
+    const parser = new DOMParser;
+    const decoded = parser.parseFromString('<!doctype html><body>'+encoded, 'text/html').body.textContent;
+    let channel = socket.channel("gamechannel:"+decoded, {});
     run_othello(game, channel);
   }
 }

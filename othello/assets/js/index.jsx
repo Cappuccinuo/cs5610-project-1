@@ -17,6 +17,7 @@ class Index extends React.Component {
   }
 
   handleChange(e) {
+    
     this.setState({
       name: e.target.value,
     });

@@ -160,7 +160,10 @@ class Othello extends React.Component {
                                                     images={this.state.images}
                                                     />);
                                         });
-    let name = window.gameName;
+
+    const encoded = window.gameName;
+    const parser = new DOMParser;
+    let name = parser.parseFromString('<!doctype html><body>'+encoded, 'text/html').body.textContent;
 
     let player = window.userToken;
 
