@@ -30,6 +30,10 @@ class Index extends React.Component {
       link = '/game/'+this.state.name;
     }
 
+    if(window.info) {
+      swal("", window.info, "warning");
+    }
+
     return (
       <div id="home_index" className="view-container">
         <header>
