@@ -8,7 +8,9 @@ their assigned color facing up. During a play, any disks of the opponent's color
 that are in a straight line and bounded by the disk just placed and another disk 
 of the current player's color are turned over to the current player's color.
 
-\subsubsection{Game object}
+Only placement of disk that can flip opponent's disk can be considered as a valid placement, otherwise the player cannot put disk at this position. If in a player's turn, no valid placement exists under the situation, it will automatically becomes opponent's turn. If both players don't have a valid placement, the player with more disks win.
+
+\subsubsection{Game objective}
 The object of the game is to have the majority of disks turned to display your 
 color when the last playable empty square is filled.
 
