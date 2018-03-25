@@ -1,95 +1,61 @@
-.container {
-  position: relative;
-  z-index: 1;
-  background: #e7e7e7;
-  max-width: 330px;
-  margin: 0 auto;
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: block;
+    list-style-type: disc;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 20px;
 }
-nav {
-  background: #fff;
-  width: 100%;
+
+li i {
+  padding-right: 2%;
 }
-nav header {
-  background: #16a085;
-  padding: 20px;
+
+
+.playerinfo {
+  padding-bottom: 1%;
 }
-nav header h1 {
-  font-size: 16px;
-  margin: 0;
-  color: #fff;
-  font-weight: 600;
-  text-align: center;
-  text-transform: uppercase;
+
+.playerinfo span {
+  font-family: 'Merriweather', serif;
+  font-size: 25px;
+  font-weight: bold;
 }
-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: none;
+
+.speculatorinfo {
+  padding-bottom: 1%;
 }
-nav ul li {
-  display: block;
-  background: #1abc9c;
+
+.speculatorinfo span {
+  font-family: 'Merriweather', serif;
+  font-size: 25px;
+  font-weight: bold;
 }
-nav ul li.active {
-  background: #fff;
+
+.elec {
+    color: #ffffff;
+    //font-family: 'Merriweather', serif;
+    font-family: "impact", Charcoal, sans-serif;
+    //font-weight: bold;
+    background-color: #282828;
+    padding: 10px;
+    transition: all 0.1s ease;
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    margin-bottom: 10px;
 }
-nav ul li.active a {
-  color: #1abc9c;
-  border-left: 2px solid #1abc9c;
-}
-nav ul li.active ul {
-  display: block;
-}
-nav ul li:last-child {
-  border-bottom: none;
-}
-nav ul li ul {
-  display: none;
-}
-nav ul li ul li a {
-  background: #fff;
-  padding-left: 40px;
-  color: #1abc9c;
-}
-nav ul li ul li a:hover {
-  padding-left: 45px;
-}
-nav ul li a {
-  display: block;
-  padding: 10px 15px;
-  color: #fff;
-  text-decoration: none;
-  transition: 0.2s linear;
-  border-left: 2px solid transparent;
-}
-nav ul li a:hover {
-  background: #fff;
-  padding-left: 20px;
-  border-left: 2px solid #1abc9c;
-  color: #1abc9c;
-}
-nav .info {
-  background: #fff;
-  border-left: 2px solid #1abc9c;
-  padding: 20px;
-  color: #666;
-  font-size: 14px;
-}
-nav footer {
-  background: #16a085;
-  padding: 15px 20px;
-  color: #fff;
-}
-nav footer p {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-.right {
-  float: right;
-}
-.left {
-  float: left;
+
+.elec:hover {
+    color: #000000;
+    background-color: #ffffff;
+    animation: b09_electric_blinkIn 0.1s step-end 0 2;
+    -webkit-animation: b09_electric_blinkIn 0.1s step-end 0 2;
+    -moz-animation: b09_electric_blinkIn 0.1s step-end 0 2;
+    transition: all 0.2s ease 0.2s;
+    -webkit-transition: all 0.2s ease 0.2s;
+    -moz-transition: all 0.2s ease 0.2s;
 }

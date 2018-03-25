@@ -201,6 +201,10 @@ div {
 
 #game_show #info_container {
     background: #eaeaed;
+    background: -webkit-linear-gradient(bottom, #F5F3F6, #D9CEC1);
+    background: -o-linear-gradient(bottom, #F5F3F6, #D9CEC1);
+    background: -moz-linear-gradient(bottom, #F5F3F6, #D9CEC1);
+    background: linear-gradient(bottom, #F5F3F6, #D9CEC1);
     -webkit-box-flex: 1;
     -moz-box-flex: 1;
     -o-box-flex: 1;
@@ -363,4 +367,11 @@ a:active {
 .score i {
   padding-right: 10px;
   padding-left: 10px;
+}
+
+.exit {
+  position: relative;
+  padding-top: 620px;
+  padding-left: 270px;
+  min-height: 30px;
 }
