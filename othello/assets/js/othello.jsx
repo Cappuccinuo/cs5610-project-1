@@ -245,7 +245,10 @@ class Othello extends React.Component {
               </div>
               <div>
                 <div className="exit">
-                  <button className="button_base elec">Exit</button>
+                  <button onClick={function(e) {
+                      e.preventDefault();
+                      window.location="/";
+                    }} className="button_base elec">Exit</button>
                 </div>
               </div>
             </section>
