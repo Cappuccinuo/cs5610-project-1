@@ -1,0 +1,62 @@
+Team members: Yuqing Cheng, Yuan Gao
+
+Project: An online Othello game that enables players to enter different rooms to
+player with others or watching others playing.
+
+What players will see on the screen:
+1. index page:
+    - Text input to enter room ID or name to join or start a new room game.
+    - A list of rooms currently existed. For each room, there is a join button
+    for player to play against others. For the room that has already start, 
+    there is a watch button for player to watch others playing.
+2. game page:
+    - There is a 8x8 board(usually green in colour), with white discs and black 
+    discs on it.
+    - At the beginning, two black discs(o) are placed on board[4][5] and 
+    board[5][4] and two white discs(x) on board[4][4] and board[5][5].
+
+      1 2 3 4 5 6 7 8
+    1
+    2 
+    3
+    4       x o
+    5       o x
+    6
+    7
+    8
+
+    - Game info part: 
+    a. Score for player 1 and player 2
+    b. Next player
+    c. Restart/Give up button to start a new game
+
+What kind of actions they can take:
+1. index page:
+    - Type in room name/id to enter a room or start a room
+    - Join a room or watch in a room by click the button
+2. game page:
+    Rules:
+    - Black chess will move first. 
+    - A player must place a disc of his colour on one of the empty squares of 
+    the board, adjacent to an opponent's disc. 
+    - According to the rule of Othello, players take turns placing discs on the 
+    board with their assigned color facing up. During a play, any discs of the 
+    opponent's color that are in a straight line and bounded by the disc just 
+    placed and another disk of the current player's color are turned over to the 
+    current player's color 
+    (Attribution goes to wikipedia: https://en.wikipedia.org/wiki/Reversi). 
+    - If one user doesn't have a legal move, he/she lost his/her turn, and it 
+    becomes opponent's turn to move. 
+    For Player:
+    - They can exit the room or reset the game
+    - They can move on the board
+    For Observer:
+    - They can exit the room
+
+
+How a player can win:
+The winner is the player who has more discs of his colour than his opponent at 
+the end of the game. This will happen when neither of the two players has a 
+legal move. Generally at this stage all 64 squares are occupied. However, 
+it is possible that some empty squares will remain where neither player may 
+move.
