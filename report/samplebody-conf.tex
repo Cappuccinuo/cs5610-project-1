@@ -10,7 +10,7 @@ of the current player's color are turned over to the current player's color.
 
 Only placement of disk that can flip opponent's disk can be considered as a valid placement, otherwise the player cannot put disk at this position. If in a player's turn, no valid placement exists under the situation, it will automatically becomes opponent's turn. If both players don't have a valid placement, the player with more disks win.
 
-\subsubsection{Game objective}
+\subsubsection{Game object}
 The object of the game is to have the majority of disks turned to display your 
 color when the last playable empty square is filled.
 
@@ -262,16 +262,88 @@ and 1000 rooms, the worst-case memory used is just O(1000,000), which can
 actually use only MBs of memory, therefore making our design totally acceptable.
 
 \section{Implementation of game rules}
-All game rules are implemented under a single module in game.ex. Apart from game rules, game.ex also handles how game state would change, whether a user should be a player or a speculator in a joining or leaving game event, as well as winner check. In general, it handles all behind-the-scene app logic/intelligence, which is the "model" portion of a MVC pattern.
+All game rules are implemented under a single module in game.ex. Apart from game 
+rules, game.ex also handles how game state would change, whether a user should be 
+a player or a speculator in a joining or leaving game event, as well as winner check. 
+In general, it handles all behind-the-scene app logic/intelligence, which is the 
+"model" portion of a MVC pattern.
 
-As for game rules, imagine we have a game board, each time a player clicks a position on this board, the algorithm would check in 8 directions (up, down, left, right, up-left, up-right, down-left, down-right) from this position to determine whether there exists a disc in the same color so that all opponent's discs along the path could flip. Since Elixir is a functional language, we implemented the above algorithm using recursion in the function check_swaps/4. Besides check_swaps/4, there is in_bound/2 function working with it to make sure not going out of bound. Also, valid_next/2 function is used to filter the cases when the next adjacent disc is in the same color, i.e. a valid move should flip at least one opponent's disc.
+As for game rules, imagine we have a game board, each time a player clicks a position 
+on this board, the algorithm would check in 8 directions (up, down, left, right, 
+up-left, up-right, down-left, down-right) from this position to determine whether 
+there exists a disc in the same color so that all opponent's discs along the path 
+could flip. Since Elixir is a functional language, we implemented the above algorithm 
+using recursion in the function check\_swaps/4. Besides check\_swaps/4, there is 
+in\_bound/2 function working with it to make sure not going out of bound. Also, 
+valid\_next/2 function is used to filter the cases when the next adjacent disc is 
+in the same color, i.e. a valid move should flip at least one opponent's disc.
 
-It's worth noticing that in Othello, in some cases, in one player's turn, the player cannot find any valid move in order to flip opponent's discs. According to many examples of Othello games, they handle this problem by simply giving the current turn to this player's opponent, and we adopted this game rule in our design. Futhermore, even if the opponent take over the turn, the opponent might also not have a valid move, in this case, as both players don't have a valid move, we will start counting number of discs to produce and announce a winner. In our algorithm, a valid next move check will be done after one player successfully makes a move. In the valid next move check, every spare place on board is checked to determine whether the opponent can make a valid move here, if no such place exists, the turn of game state will remain the same and this will be notified at front-end. If current player cannot move, either, a winner will be determined and announced. The time complexity of this process might sound high, i.e. if total positions on board is N, our algorithm is approximately O(N^2), but there are totally only 64 positions on board, that is, the input size of our algorithm is very small in nature, so the server would definitely afford an "inefficient" algorithm, not to mention it's still poly-nomial.
+It's worth noticing that in Othello, in some cases, in one player's turn, the player 
+cannot find any valid move in order to flip opponent's discs. According to many 
+examples of Othello games, they handle this problem by simply giving the current 
+turn to this player's opponent, and we adopted this game rule in our design. 
+Futhermore, even if the opponent take over the turn, the opponent might also not 
+have a valid move, in this case, as both players don't have a valid move, we will 
+start counting number of discs to produce and announce a winner. In our algorithm, 
+a valid next move check will be done after one player successfully makes a move. 
+In the valid next move check, every spare place on board is checked to determine 
+whether the opponent can make a valid move here, if no such place exists, the turn 
+of game state will remain the same and this will be notified at front-end. If current 
+player cannot move, either, a winner will be determined and announced. The time 
+complexity of this process might sound high, i.e. if total positions on board is N, 
+our algorithm is approximately O(N\^2), but there are totally only 64 positions on 
+board, that is, the input size of our algorithm is very small in nature, so the 
+server would definitely afford an "inefficient" algorithm, not to mention it's still 
+poly-nomial.
 
-Check winner is also an important part of game rules. In most cases, players fill up all spaces on board, and player with more discs on the board becomes winner. Besides, as discussed above, if both players cannot make a valid move, the player with more disc on the board becomes winner. Moreover, a special case of the second case is that when all colors of discs on board become identical, this should be combined in second case. These logics are implemented with get_num_colors/3 function to count the number of discs in each color. Similar to check_swaps/4, get_num_colors/3 is also implemented using recursion.
+Check winner is also an important part of game rules. In most cases, players fill up 
+all spaces on board, and player with more discs on the board becomes winner. Besides, 
+as discussed above, if both players cannot make a valid move, the player with more 
+disc on the board becomes winner. Moreover, a special case of the second case is that 
+when all colors of discs on board become identical, this should be combined in second 
+case. These logics are implemented with get\_num\_colors/3 function to count the number 
+of discs in each color. Similar to check\_swaps/4, get\_num\_colors/3 is also implemented 
+using recursion.
 
 
-\section{Challenges and Solutions}
+\section{Problems/Challenges and Solutions}
+\subsection{Server-side update on every client} Every time the server side has
+been updated, every client connect to the same game should see the change. This
+can be done with broadcast in Phoenix.Channel.
+\subsection{Speculator number increase when refresh} When we implement 
+speculators function, the number of speculators will increase when the speculator 
+refresh the page even the actual number of speculators remain the same. That's 
+because at first we just append the user\_name to speculators when the user\_name
+exists. Then we add a judgement that if the speculator is already in current\_game
+speculators, we just move on and do nothing.
+\subsection{Game page login style missed} Sometimes when user log in from lobby page,
+the style is incomplete, this can be fixed by changing all the url in index page
+to absolute path. Like {\bf href="/images/icons/favicon.ico"} instead of 
+{\bf href="images/icons/favicon.ico"}.
+\begin{figure}[!htb]
+\includegraphics[height=2.0in, width=3.3in]{stylemiss.png}
+\caption{\texttt{Missing style}}
+\end{figure}
+\subsection{Empty lobby} We redirect user to index page when lobby is empty. While 
+when another user created a new table, the user who has been redirected to index
+page has to refresh before clicking into the lobby page. As @gamenum we count on the backend
+ is only loaded for once in index page. Solution is that the judgement of gameNum 
+ can be moved to lobby page (.html.eex), if in lobby page we find gameNum is 0, 
+ just render index page.
+\subsection{Submit form when hit enter} Index part is written in react, and
+we want to submit form by hit enter instead of click on the button. We need
+to write the form onSubmit function and change the button type to submit.
+\begin{lstlisting}
+<form onSubmit={function(e) {
+  e.preventDefault();
+  window.location=link;
+  }}>
+  <div className="input">
+    <input onKeyUp={this.handleChange} placeholder={'Enter game name'}/>
+      <button id="enter" type="submit" color='success'>Join Game</button>
+  </div>
+</form>
+\end{lstlisting}
 
 
 
