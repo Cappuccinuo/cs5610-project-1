@@ -17,7 +17,7 @@ https://github.com/YuqingCheng/cs5610-project-1
 
 
 4. What's the URL that you deployed to?
-hello.yuqingc.com
+othello.yuqingc.com
 
 
 5. Is your app functionality complete? If not, what's missing?
