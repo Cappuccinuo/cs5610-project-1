@@ -288,5 +288,29 @@ defmodule Othello.Game do
     else
       false
     end
-  end 
+  end
+
+  def user_leave(curr_name, user_name) do
+    game = get_state curr_name
+    if game && Enum.member? game.players, user_name do
+      game = %{game | online_players: game.online_players - 1} 
+      if game.online_players > 0 do
+        # there is remaining online player
+        resp = update_state(%{"state" => game}, curr_name)
+        %{"state" => resp["state"], "msg" => user_name <> " (player) leaves.", "type" => "warning", "label" => "user:leave"}
+      else
+        # no online player, close and delete game table
+        :ok = delete_state curr_name
+        %{"msg" => user_name <> " (last player) has left. Table closed", "type" => "warning", "label" => "table:close"}
+      end
+    else
+      if game && Enum.member? game.speculators, user_name do
+        game = %{game | speculators: List.delete(game.speculators, user_name)}
+        resp = update_state(%{"state" => game}, curr_name)
+        %{"state" => resp["state"], "msg" => user_name <> " leaves.", "type" => "info", "label" => "user:leave"}
+      else
+        %{"state" => game, "msg" => "Anonymous leaves.", "type" => "info", "label" => "user:leave"}
+      end
+    end
+  end
 end

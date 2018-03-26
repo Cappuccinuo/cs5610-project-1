@@ -244,14 +244,6 @@ class Othello extends React.Component {
                   <span><i class="fas fa-times"></i>{black}</span>
                 </div>
               </div>
-              <div>
-                <div className="exit">
-                  <button onClick={function(e) {
-                      e.preventDefault();
-                      window.location="/";
-                    }} className="button_base elec">Exit</button>
-                </div>
-              </div>
             </section>
           </section>
           <aside id="info_container">

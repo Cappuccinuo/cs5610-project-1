@@ -17,7 +17,16 @@ export default class Info extends React.Component {
     return (
       <div className="sidebar">
         <div>
+         
           <div className="userbar">
+          <div>
+                <div className="exit">
+                  <button onClick={function(e) {
+                      e.preventDefault();
+                      window.location="/";
+                    }} className="button_base elec">Exit</button>
+                </div>
+              </div>
             <div className="playerinfo">
               <div>
                 <span>Players</span>

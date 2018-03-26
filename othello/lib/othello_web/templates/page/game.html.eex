@@ -1,6 +1,6 @@
 <script>
   window.gameName = "<%= @game %>";
-  window.userToken = "<%= @current_user %>" == "" ? "Anonymous" : "<%= @current_user %>";
+  window.userToken = "<%= @current_user %>";
 </script>
 
 <div id="game" style="background-image: url('/images/bg-07.jpg');">
