@@ -43,6 +43,7 @@ class Othello extends React.Component {
     });
 
     channel.on("user:leave", resp => {
+      this.updateView(resp);
       if(resp["type"] == "warning") {
         swal("", resp.msg, resp["type"]);
       }else{

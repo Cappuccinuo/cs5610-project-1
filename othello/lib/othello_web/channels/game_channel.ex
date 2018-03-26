@@ -48,7 +48,7 @@ defmodule OthelloWeb.Gamechannel do
       if game.online_players > 0 do
         # there is remaining online player
         resp = Game.update_state(%{"state" => game}, socket.assigns.curr_name)
-        broadcast! socket, "user:leave", %{"msg" => user_name <> " (player) leaves.", "type" => "warning"}
+        broadcast! socket, "user:leave", %{"state" => resp["state"], "msg" => user_name <> " (player) leaves.", "type" => "warning"}
         socket
       else
         # no online player, close and delete game table
@@ -60,7 +60,7 @@ defmodule OthelloWeb.Gamechannel do
       if game && Enum.member? game.speculators, user_name do
         game = %{game | speculators: List.delete(game.speculators, user_name)}
         resp = Game.update_state(%{"state" => game}, socket.assigns.curr_name)
-        broadcast! socket, "user:leave", %{"msg" => user_name <> " leaves.", "type" => "info"}
+        broadcast! socket, "user:leave", %{"state" => resp["state"], "msg" => user_name <> " leaves.", "type" => "info"}
         socket
       else
         broadcast! socket, "user:leave", %{"msg" => "Anonymous leaves.", "type" => "info"}
