@@ -13,7 +13,7 @@ https://github.com/YuqingCheng/cs5610-project-1
 
 
 3. What's the version number of your github release?
-
+1.0
 
 
 4. What's the URL that you deployed to?
@@ -30,7 +30,7 @@ Yes.
 
 7. What parts of the project did each team member work on?
 Yuqing: Server part, Report, Deployment
-yuan:   UI, part of React components, Report
+yuan  : UI, part of React components, Report
 
 
 
