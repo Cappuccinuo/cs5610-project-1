@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex sample-aamas18"] 1522029105 "sample-aamas18.aux" "sample-aamas18.bbl" "sample-aamas18" 1522082314
-  "sample-aamas18.aux" 1522082310 4229 10720eba8b3b111636a722ff474d8daa ""
+["bibtex sample-aamas18"] 1522029105 "sample-aamas18.aux" "sample-aamas18.bbl" "sample-aamas18" 1522172034
+  "sample-aamas18.aux" 1522172030 4229 10720eba8b3b111636a722ff474d8daa ""
   "sample-aamas18.bcf" 0 -1 0 ""
   "sample-bibliography.bib" 1521992380 2227 43084e3d4b25b6d8a84f620283afe4ba ""
   (generated)
   "sample-aamas18.bbl"
   "sample-aamas18.blg"
-["pdflatex"] 1522082309 "sample-aamas18.tex" "sample-aamas18.pdf" "sample-aamas18" 1522082314
+["pdflatex"] 1522172029 "sample-aamas18.tex" "sample-aamas18.pdf" "sample-aamas18" 1522172034
   "/usr/local/texlive/2015/texmf-dist/tex/generic/iftex/iftex.sty" 1365117071 2560 68a7cdbd7a5424fa22f4176117a417e9 ""
   "/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/local/texlive/2015/texmf-dist/tex/generic/kastrup/binhex.tex" 1215376579 2553 4b99aa9667b708dd355926023d705446 ""
@@ -102,15 +102,15 @@
   "lobby.png" 1521992380 106443 f0ea8017faed2683a605bc164affd1d7 ""
   "lobby2.png" 1521992380 1358801 5eb3a23bc8df97772ce46b192d0ac1ae ""
   "login.png" 1521992380 1668789 6f8e8d806ac52e482624ba53c2158358 ""
-  "sample-aamas18.aux" 1522082310 4229 10720eba8b3b111636a722ff474d8daa ""
+  "sample-aamas18.aux" 1522172030 4229 10720eba8b3b111636a722ff474d8daa ""
   "sample-aamas18.bbl" 1522029105 0 d41d8cd98f00b204e9800998ecf8427e "bibtex sample-aamas18"
-  "sample-aamas18.out" 1522082310 3578 95e09c56e2fddc8298ccf968a3223def ""
-  "sample-aamas18.tex" 1522007414 6001 d6b97c64bcfcb3fa3aa91cbab0e875b6 ""
+  "sample-aamas18.out" 1522172030 3578 95e09c56e2fddc8298ccf968a3223def ""
+  "sample-aamas18.tex" 1522172024 6001 c85b830e06dc3253fd19f78282187cbc ""
   "samplebody-conf.tex" 1522029252 28763 b8255501bbd94a6e1972c3a49f1eef36 ""
   "stylemiss.png" 1522028054 341041 107a83e556620bc4f88e61fd38493a0e ""
   (generated)
-  "sample-aamas18.aux"
-  "sample-aamas18.log"
   "sample-aamas18.pdf"
   "comment.cut"
+  "sample-aamas18.log"
   "sample-aamas18.out"
+  "sample-aamas18.aux"
